@@ -1,16 +1,20 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: cprom-stack
+  annotations:
+    argocd.argoproj.io/sync-options: Replace=true
+  name: cprom
   namespace: argocd
 spec:
+  syncPolicy:
+    syncOptions:
+    - ServerSideApply=true
   project: default
   source:
     chart: kube-prometheus-stack
     repoURL: https://prometheus-community.github.io/helm-charts
     targetRevision: 43.1.1
     helm:
-      skipCrds: true
       releaseName: cprom
       valuesFiles:
       - prom-values.yaml
