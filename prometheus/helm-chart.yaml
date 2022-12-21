@@ -11,6 +11,6 @@ spec:
     helm:
       valuesFiles:
       - prom-values.yaml
-destination:
-  server: https://kubernetes.default.svc
-  namespace: prometheus
+  destination:
+	server: https://kubernetes.default.svc
+	namespace: prometheus
