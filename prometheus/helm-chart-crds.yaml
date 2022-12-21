@@ -12,9 +12,7 @@ spec:
     syncOptions:
     - Replace=true
     helm:
-      releaseName: cprom
-      valuesFiles:
-      - prom-values.yaml
+      releaseName: cprom-crds
   destination:
     server: "https://kubernetes.default.svc"
     namespace: cprom
