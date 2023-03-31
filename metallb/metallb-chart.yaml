@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: metallb
+  namespace: metallb
+spec:
+  syncPolicy:
+    syncOptions:
+    - ServerSideApply=true
+  project: default
+  source:
+    chart: metallb/metallb
+    repoURL: https://metallb.github.io/metallb
+    helm:
+      releaseName: metallb
+      valueFiles: [ "metallb-values.yaml" ]
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: metallb
