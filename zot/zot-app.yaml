@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: zot
+  namespace: zot
+spec:
+  syncPolicy:
+    syncOptions:
+    - ServerSideApply=true
+  project: default
+  source:
+    chart: project-zot/zot
+    repoUrl: http://zotregistry.io/helm-charts
+    helm:
+      releaseName: zot
+      parameters:
+      - name: "service.type"
+        value: LoadBalancer
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: zot
