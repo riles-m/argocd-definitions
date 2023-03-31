@@ -16,5 +16,4 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name: ""
 service:
-  type: NodePort
-  port: 5000
+  type: LoadBalancer
