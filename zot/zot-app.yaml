@@ -9,8 +9,9 @@ spec:
     - ServerSideApply=true
   project: default
   source:
-    chart: zot
+    path: "/"
     repoUrl: http://zotregistry.io/helm-charts
+    chart: zot
     helm:
       releaseName: zot
       parameters:
