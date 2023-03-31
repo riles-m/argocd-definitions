@@ -13,7 +13,7 @@ spec:
   project: default
   source:
     repoURL: http://zotregistry.io/helm-charts
-    chart: zot
+    chart: project-zot/zot
     helm:
       releaseName: zot
       parameters:
