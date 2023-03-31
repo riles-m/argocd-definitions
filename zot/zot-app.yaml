@@ -4,6 +4,8 @@ metadata:
   name: zot
   namespace: zot
 spec:
+  sourceNamespaces:
+    - zot
   syncPolicy:
     syncOptions:
     - ServerSideApply=true
