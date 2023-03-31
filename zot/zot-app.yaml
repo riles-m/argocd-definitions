@@ -4,8 +4,9 @@ metadata:
   name: zot
   namespace: zot
 spec:
-  sourceNamespaces:
-    - zot
+  clusterResourceWhitelist:
+    - group: ''
+      kind: 'Namespace'
   syncPolicy:
     syncOptions:
     - ServerSideApply=true
