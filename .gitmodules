@@ -1,0 +1,3 @@
+[submodule "kubernetes-jenkins"]
+	path = kubernetes-jenkins
+	url = https://github.com/scriptcamp/kubernetes-jenkins
