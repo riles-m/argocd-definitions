@@ -13,13 +13,13 @@ spec:
      name: le-issuer-account-key
    solvers:
    - dns01:
-     webhook:
-       groupName: acme.vultr.com
-       solverName: vultr
-       config:
-         apiKeySecretRef:
-           key: apiKey
-           name: vultr-credentials
-         # The ingressClass used to create the necessary ingress routes
-         ingress:
-           class: traefik
+       webhook:
+         groupName: acme.vultr.com
+         solverName: vultr
+         config:
+           apiKeySecretRef:
+             key: apiKey
+             name: vultr-credentials
+           # The ingressClass used to create the necessary ingress routes
+           ingress:
+             class: traefik
