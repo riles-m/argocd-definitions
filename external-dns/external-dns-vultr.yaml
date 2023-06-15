@@ -53,7 +53,7 @@ spec:
       - name: external-dns
         image: registry.k8s.io/external-dns/external-dns:v0.13.5
         args:
-        - --source=service # ingress is also possible
+        - --source=ingress # ingress is also possible
         - --provider=vultr
         envFrom:
         - secretRef:
