@@ -956,9 +956,15 @@ metadata:
     app.kubernetes.io/instance: authentik
     app.kubernetes.io/version: "2023.4.0"
     app.kubernetes.io/managed-by: Helm
+    external-dns.alpha.kubernetes.io/hostname: "authentik.dev-riles.xyz."
+    cert-manager.io/cluster-issuer: "le-example-http"
 spec:
+  tls:
+    - hosts:
+        - authentik.dev-riles.xyz
+      secretName: tls-authentik-ingress-http
   rules:
-    - host: "authentik.domain.tld"
+    - host: "authentik.dev-riles.xyz"
       http:
         paths:
           - path: "/"
@@ -968,4 +974,3 @@ spec:
                 name: authentik
                 port:
                   name: http
-
