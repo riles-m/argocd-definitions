@@ -301,16 +301,16 @@ spec:
       volumes:
       - name: nextcloud-main
       {{- if .Values.persistence.enabled }}
-        persistentVolumeClaim:
-          claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "nextcloud.fullname" . }}-nextcloud{{- end }}
+        nfs:
+          path: /tank/nextcloud_k8s_main
+          server: drebin.riles.xyz
       {{- else }}
         emptyDir: {}
       {{- end }}
-      {{- if and .Values.persistence.nextcloudData.enabled .Values.persistence.enabled }}
       - name: nextcloud-data
-        persistentVolumeClaim:
-          claimName: {{ if .Values.persistence.nextcloudData.existingClaim }}{{ .Values.persistence.nextcloudData.existingClaim }}{{- else }}{{ template "nextcloud.fullname" . }}-nextcloud-data{{- end }}
-      {{- end }}
+        nfs:
+          path: /tank/nextcloud_k8s_data
+          server: drebin.riles.xyz
       {{- if .Values.nextcloud.configs }}
       - name: nextcloud-config
         configMap:
