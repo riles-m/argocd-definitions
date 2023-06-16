@@ -13,11 +13,11 @@ spec:
         app: transmission-openvpn
     spec:
       containers:
-        - envFrom:
-          secretRef:
-            name: transmission-config
+        - name: transmission-openvpn
+          envFrom:
+          - secretRef:
+              name: transmission-config
           image: haugene/transmission-openvpn
-          name: transmission-openvpn
           ports:
             - containerPort: 9091
           securityContext:
