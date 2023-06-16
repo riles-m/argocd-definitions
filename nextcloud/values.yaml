@@ -87,7 +87,8 @@ nextcloud:
   # If web server is not binding default port, you can define it
   containerPort: 80
   datadir: /nfs_data
-  persistence: true
+  persistence: 
+    enabled: true
   mail:
     enabled: true
     fromAddress: reilly
