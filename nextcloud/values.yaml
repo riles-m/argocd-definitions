@@ -86,7 +86,7 @@ nextcloud:
   update: 0
   # If web server is not binding default port, you can define it
   containerPort: 80
-  datadir: /var/www/html/data
+  datadir: /nfs_data
   persistence:
     subPath:
   mail:
@@ -189,7 +189,7 @@ nextcloud:
       readOnly: false
   extraVolumeMounts:
   - name: nfs-data
-    mountPath: "/var/www/html/nfs_data"
+    mountPath: "/nfs_data"
 
   # Set securityContext parameters for the nextcloud CONTAINER only (will not affect nginx container).
   # For example, you may need to define runAsNonRoot directive
