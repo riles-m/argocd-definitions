@@ -1,23 +1,27 @@
----
-# Source: nextcloud/templates/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: release-name-nextcloud
+  name: {{ template "nextcloud.fullname" . }}
   labels:
-    app.kubernetes.io/name: nextcloud
-    helm.sh/chart: nextcloud-3.5.13
-    app.kubernetes.io/instance: release-name
-    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: {{ include "nextcloud.name" . }}
+    helm.sh/chart: {{ include "nextcloud.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/component: app
 spec:
-  type: ClusterIP
+  type: {{ .Values.service.type }}
+  {{- if eq .Values.service.type "LoadBalancer" }}
+  loadBalancerIP: {{ default "" .Values.service.loadBalancerIP }}
+  {{- end }}
   ports:
-  - port: 8080
-    targetPort: 80
+  - port: {{ .Values.service.port }}
+    targetPort: {{ .Values.nextcloud.containerPort }}
     protocol: TCP
     name: http
+    {{- if eq .Values.service.type "NodePort" }}
+    nodePort: {{ default "" .Values.service.nodePort}}
+    {{- end }}
   selector:
-    app.kubernetes.io/name: nextcloud
-    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/name: {{ include "nextcloud.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/component: app
