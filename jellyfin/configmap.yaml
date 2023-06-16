@@ -1,0 +1,14 @@
+---
+# Source: jellyfin/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jellyfin
+  labels:
+    helm.sh/chart: jellyfin-2.0.0
+    app.kubernetes.io/name: jellyfin
+    app.kubernetes.io/instance: jellyfin
+    app.kubernetes.io/version: "10.8.10"
+    app.kubernetes.io/managed-by: Helm
+data:
+  {}

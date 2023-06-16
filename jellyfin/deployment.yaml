@@ -1,0 +1,71 @@
+---
+# Source: jellyfin/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jellyfin
+  labels:
+    helm.sh/chart: jellyfin-2.0.0
+    app.kubernetes.io/name: jellyfin
+    app.kubernetes.io/instance: jellyfin
+    app.kubernetes.io/version: "10.8.10"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  strategy:
+    type: Recreate
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: jellyfin
+      app.kubernetes.io/instance: jellyfin
+  template:
+    metadata:
+      annotations:
+        checksum/configmap: 60029bdb2240613e4265772d2004ad4e7191ee0d9358e262e6126bcac4a7fb88
+        checksum/secret: 28589fb25d2f8b1908c57efa0788e37a0f7942126f7fdc98620d8ebb63e2e657
+      labels:
+        app.kubernetes.io/name: jellyfin
+        app.kubernetes.io/instance: jellyfin
+    spec:
+      hostNetwork: false
+      serviceAccountName: jellyfin
+      securityContext:
+        {}
+      dnsPolicy: ClusterFirst
+      containers:
+        - name: jellyfin
+          securityContext:
+            capabilities:
+              add:
+              - NET_ADMIN
+          image: "docker.io/linuxserver/jellyfin:10.8.10"
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - mountPath: /config
+              name: config
+            - mountPath: /data
+              name: data
+          envFrom:
+            - configMapRef:
+                name: jellyfin
+            - secretRef:
+                name: jellyfin
+          ports:
+            - name: http
+              containerPort: 8096
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              port: http
+          resources:
+            {}
+      volumes:
+        - name: config
+          nfs:
+            path: /tank/jellfyin_nfs_config
+            server: drebin.riles.xyz
+        - name: data
+          nfs:
+            path: /tank/jellfyin_nfs
+            readOnly: true
+            server: drebin.riles.xyz
