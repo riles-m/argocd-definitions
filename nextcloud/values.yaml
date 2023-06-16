@@ -375,7 +375,6 @@ service:
 persistence:
   # Nextcloud Data (/var/www/html)
   enabled: true
-  storageClass: nfs-client
   annotations: {}
   ## nextcloud data Persistent Volume Storage Class
   ## If defined, storageClassName: <storageClass>
