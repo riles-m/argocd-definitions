@@ -300,13 +300,9 @@ spec:
     {{- end }}
       volumes:
       - name: nextcloud-main
-      {{- if .Values.persistence.enabled }}
         nfs:
           path: /tank/nextcloud_k8s_main
           server: drebin.riles.xyz
-      {{- else }}
-        emptyDir: {}
-      {{- end }}
       - name: nextcloud-data
         nfs:
           path: /tank/nextcloud_k8s_data
