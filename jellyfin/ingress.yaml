@@ -24,7 +24,7 @@ metadata:
               backend:
                 service:
                   name: jellyfin
-                  port:
+                  port: 8096
         tls:
         - hosts:
           - jellyfin.dev-riles.xyz
