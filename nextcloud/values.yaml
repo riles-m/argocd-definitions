@@ -189,7 +189,7 @@ nextcloud:
       readOnly: false
   extraVolumeMounts:
   - name: nfs-data
-    mountPath: "/nfs_data"
+    mountPath: "/var/www/"
 
   # Set securityContext parameters for the nextcloud CONTAINER only (will not affect nginx container).
   # For example, you may need to define runAsNonRoot directive
