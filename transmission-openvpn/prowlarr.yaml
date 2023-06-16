@@ -54,7 +54,7 @@ spec:
       port: 9696
       targetPort: 9696
   selector:
-    kubernetes.io/name: prowlarr
+    app: prowlarr
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
