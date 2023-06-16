@@ -9,7 +9,7 @@ imagePullSecrets: []
 
 nfs:
   server: drebin.riles.xyz
-  path: /k8s-storage
+  path: /tank/k8s-storage
   mountOptions:
   volumeName: nfs-subdir-external-provisioner-root
   # Reclaim policy for the main nfs volume
