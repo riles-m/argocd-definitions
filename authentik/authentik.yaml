@@ -959,6 +959,7 @@ metadata:
   annotations:
     external-dns.alpha.kubernetes.io/hostname: "authentik.dev-riles.xyz."
     cert-manager.io/cluster-issuer: "le-example-http"
+    kubernetes.io/ingress.class: nginx
 spec:
   tls:
     - hosts:
