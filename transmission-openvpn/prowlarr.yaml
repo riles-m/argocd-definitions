@@ -4,9 +4,6 @@ metadata:
   name: prowlarr
 spec:
   replicas: 1
-  selector:
-    matchLabels:
-      io.kompose.service: prowlarr
   strategy:
     type: Recreate
     spec:
