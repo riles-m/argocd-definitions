@@ -24,7 +24,8 @@ spec:
           backend:
             service:
               name: jellyfin
-              port: 8096
+              port:
+                number: 8096
     tls:
     - hosts:
       - jellyfin.dev-riles.xyz
