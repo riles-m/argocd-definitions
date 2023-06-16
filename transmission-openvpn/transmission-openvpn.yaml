@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: transmission-openvpn
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    spec:
+      containers:
+        envFrom:
+        - secretRef:
+            name: transmission-config
+          image: haugene/transmission-openvpn
+          name: transmission-openvpn
+          ports:
+            - containerPort: 9091
+          securityContext:
+            capabilities:
+              add:
+                - NET_ADMIN
+          volumeMounts:
+            - mountPath: /config
+              name: transmission-openvpn-config
+            - mountPath: /data
+              name: nfs-data
+      restartPolicy: Always
+      volumes:
+        - name: transmission-openvpn-config
+          persistentVolumeClaim:
+            claimName: transmission-openvpn-config
+        - name: nfs-data
+          nfs:
+            server: drebin.riles.xyz
+            path: /tank/transmission_k8s_data
+            readOnly: false
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: transmission-openvpn-config
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: transmission-openvpn
+spec:
+  ports:
+    - name: "9091"
+      port: 9091
+      targetPort: 9091
+  selector:
+    kubernetes.io/name: transmission-openvpn

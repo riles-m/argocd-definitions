@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sonarr
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+    spec:
+      containers:
+        - env:
+            - name: PGID
+              value: "1000"
+            - name: PUID
+              value: "1000"
+            - name: TZ
+              value: America/New_York
+          image: linuxserver/sonarr
+          name: sonarr
+          ports:
+            - containerPort: 8989
+          resources: {}
+          volumeMounts:
+            - mountPath: /config
+              name: sonarr-config
+            - mountPath: /mnt/data
+              name: sonarr-data
+      restartPolicy: Always
+      volumes:
+        - name: sonarr-config
+          persistentVolumeClaim:
+            claimName: sonarr-config
+        - name: sonarr-data
+          persistentVolumeClaim:
+            claimName: sonarr-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sonarr
+spec:
+  ports:
+    - name: "8989"
+      port: 8989
+      targetPort: 8989
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sonarr-config
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sonarr-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+  selector:
+    kubernetes.io/name: sonarr
