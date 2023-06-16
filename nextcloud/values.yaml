@@ -1,4 +1,4 @@
-## Official nextcloud image version
+## Official nextcl_dataoud image version
 ## ref: https://hub.docker.com/r/library/nextcloud/tags/
 ##
 image:
@@ -182,14 +182,14 @@ nextcloud:
   # Extra mounts for the pods. Example shown is for connecting a legacy NFS volume
   # to NextCloud pods in Kubernetes. This can then be configured in External Storage
   extraVolumes:
-  #  - name: nfs
-  #    nfs:
-  #      server: "10.0.0.1"
-  #      path: "/nextcloud_data"
-  #      readOnly: false
+  - name: nfs_data
+    nfs:
+      server: drebin.riles.xyz
+      path: /tank/nextcloud_k8s_data
+      readOnly: false
   extraVolumeMounts:
-  #  - name: nfs
-  #    mountPath: "/legacy_data"
+  - name: nfs_data
+    mountPath: "/nfs_data"
 
   # Set securityContext parameters for the nextcloud CONTAINER only (will not affect nginx container).
   # For example, you may need to define runAsNonRoot directive
