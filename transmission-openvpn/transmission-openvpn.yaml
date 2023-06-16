@@ -82,7 +82,7 @@ spec:
             service:
               name: transmission-openvpn
               port:
-                number: 9696
+                number: 9091
   tls:
   - hosts:
     - transmission-openvpn.dev-riles.xyz
