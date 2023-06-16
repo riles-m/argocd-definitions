@@ -26,7 +26,7 @@ spec:
               name: jellyfin
               port:
                 number: 8096
-    tls:
-    - hosts:
-      - jellyfin.dev-riles.xyz
-      secretName: tls-jellyfin-ingress-http
+  tls:
+  - hosts:
+    - jellyfin.dev-riles.xyz
+    secretName: tls-jellyfin-ingress-http
