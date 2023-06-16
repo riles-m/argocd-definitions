@@ -13,8 +13,8 @@ spec:
         app: transmission-openvpn
     spec:
       containers:
-        envFrom:
-        - secretRef:
+        - envFrom:
+          secretRef:
             name: transmission-config
           image: haugene/transmission-openvpn
           name: transmission-openvpn
