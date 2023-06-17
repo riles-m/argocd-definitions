@@ -22,7 +22,7 @@ spec:
             - name: TZ
               value: America/New_York
             - name: TRANSMISSION_DOWNLOAD_QUEUE_SIZE
-              value: 50
+              value: "50"
           envFrom:
           - secretRef:
               name: transmission-config
