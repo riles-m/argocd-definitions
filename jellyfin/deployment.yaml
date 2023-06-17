@@ -44,7 +44,7 @@ spec:
             - mountPath: /config
               name: config
             - mountPath: /data
-              name: data
+              name: nfs-data
           envFrom:
             - configMapRef:
                 name: jellyfin
@@ -64,8 +64,8 @@ spec:
           nfs:
             path: /tank/jellfyin_nfs_config
             server: drebin.riles.xyz
-        - name: data
+        - name: nfs-data
           nfs:
-            path: /tank/jellfyin_nfs
-            readOnly: true
             server: drebin.riles.xyz
+            path: /tank/transmission_k8s_data
+            readOnly: true
