@@ -23,7 +23,7 @@ spec:
           image: linuxserver/readarr
           name: readarr
           ports:
-            - containerPort: 7878
+            - containerPort: 8787
           resources: {}
           volumeMounts:
             - mountPath: /config
@@ -47,9 +47,9 @@ metadata:
   name: readarr
 spec:
   ports:
-    - name: "7878"
-      port: 7878
-      targetPort: 7878
+    - name: "8787"
+      port: 8787
+      targetPort: 8787
   selector:
     app: readarr
 ---
@@ -89,7 +89,7 @@ spec:
             service:
               name: readarr
               port:
-                number: 7878
+                number: 8787
   tls:
   - hosts:
     - readarr.dev-riles.xyz
