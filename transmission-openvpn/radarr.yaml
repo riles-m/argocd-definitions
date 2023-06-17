@@ -64,17 +64,6 @@ spec:
     requests:
       storage: 2Gi
 ---
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: radarr-data
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 100Mi
----
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
