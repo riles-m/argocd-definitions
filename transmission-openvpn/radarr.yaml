@@ -28,16 +28,18 @@ spec:
           volumeMounts:
             - mountPath: /config
               name: radarr-config
-            - mountPath: /mnt/data
-              name: radarr-data
+            - mountPath: /data
+              name: nfs-data
       restartPolicy: Always
       volumes:
         - name: radarr-config
           persistentVolumeClaim:
             claimName: radarr-config
-        - name: radarr-data
-          persistentVolumeClaim:
-            claimName: radarr-data
+        - name: nfs-data
+          nfs:
+            server: drebin.riles.xyz
+            path: /tank/transmission_k8s_data
+            readOnly: false
 ---
 apiVersion: v1
 kind: Service
