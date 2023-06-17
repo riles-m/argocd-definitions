@@ -5,11 +5,7 @@ kind: Ingress
 metadata:
   name: jellyfin
   labels:
-    helm.sh/chart: jellyfin-2.0.0
-    app.kubernetes.io/name: jellyfin
-    app.kubernetes.io/instance: jellyfin
-    app.kubernetes.io/version: "10.8.10"
-    app.kubernetes.io/managed-by: Helm
+    app: jellyfin
   annotations:
     cert-manager.io/cluster-issuer: le-example-http
     external-dns.alpha.kubernetes.io/hostname: jellyfin.dev-riles.xyz.
