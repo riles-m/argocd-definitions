@@ -23,7 +23,7 @@ spec:
           image: linuxserver/lidarr
           name: lidarr
           ports:
-            - containerPort: 7878
+            - containerPort: 8686
           resources: {}
           volumeMounts:
             - mountPath: /config
@@ -47,9 +47,9 @@ metadata:
   name: lidarr
 spec:
   ports:
-    - name: "7878"
-      port: 7878
-      targetPort: 7878
+    - name: "8686"
+      port: 8686
+      targetPort: 8686
   selector:
     app: lidarr
 ---
@@ -89,7 +89,7 @@ spec:
             service:
               name: lidarr
               port:
-                number: 7878
+                number: 8686
   tls:
   - hosts:
     - lidarr.dev-riles.xyz
