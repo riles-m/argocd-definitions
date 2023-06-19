@@ -28,6 +28,14 @@ spec:
               name: config
             - mountPath: /data
               name: nfs-data
+            - mountPath: /var/cache/jellyfin
+              name: jf-cache
+            - mountPath: /etc/jellyfin
+              name: jf-config
+            - mountPath: /var/lib/jellyfin
+              name: jf-data
+            - mountPath: /var/log/jellyfin
+              name: jf-log
           envFrom:
             - configMapRef:
                 name: jellyfin
@@ -50,3 +58,19 @@ spec:
             server: drebin.riles.xyz
             path: /tank/transmission_k8s_data
             readOnly: true
+        - name: jf-cache
+          nfs:
+            server: drebin.riles.xyz
+            path: /tank/jellyfin_cache_dir
+        - name: jf-logs
+          nfs:
+            server: drebin.riles.xyz
+            path: /tank/jellyfin_logs_dir
+        - name: jf-data
+          nfs:
+            server: drebin.riles.xyz
+            path: /tank/jellyfin_data_dir
+        - name: jf-config
+          nfs:
+            server: drebin.riles.xyz
+            path: /tank/jellyfin_config_dir
