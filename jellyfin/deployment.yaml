@@ -35,7 +35,7 @@ spec:
             - mountPath: /var/lib/jellyfin
               name: jf-data
             - mountPath: /var/log/jellyfin
-              name: jf-log
+              name: jf-logs
           envFrom:
             - configMapRef:
                 name: jellyfin
