@@ -25,22 +25,6 @@ metadata:
     app.kubernetes.io/version: "2021.10.2"
     app.kubernetes.io/managed-by: Helm
 ---
-# Source: authentik/charts/postgresql/templates/secrets.yaml
-apiVersion: v1
-kind: Secret
-metadata:
-  name: authentik-postgresql
-  labels:
-    app.kubernetes.io/name: postgresql
-    helm.sh/chart: postgresql-10.16.2
-    app.kubernetes.io/instance: authentik
-    app.kubernetes.io/managed-by: Helm
-  namespace: authentik
-type: Opaque
-data:
-  postgresql-postgres-password: "TkJzS2VvUTRpaQ=="
-  postgresql-password: "OUlNbzUzMERVTCtGNFdLeXEyQ0tUV1J4cEhhREhuU2EyU3JOM3dhczNRT2dGWEdK"
----
 # Source: authentik/charts/redis/templates/configmap.yaml
 apiVersion: v1
 kind: ConfigMap
@@ -944,35 +928,3 @@ spec:
         resources:
           requests:
             storage: "8Gi"
----
-# Source: authentik/templates/ingress.yaml
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: authentik
-  labels:
-    helm.sh/chart: authentik-2023.4.0
-    app.kubernetes.io/name: authentik
-    app.kubernetes.io/instance: authentik
-    app.kubernetes.io/version: "2023.4.0"
-    app.kubernetes.io/managed-by: Helm
-  annotations:
-    external-dns.alpha.kubernetes.io/hostname: "authentik.dev-riles.xyz."
-    cert-manager.io/cluster-issuer: "le-example-http"
-    kubernetes.io/ingress.class: nginx
-spec:
-  tls:
-    - hosts:
-        - authentik.dev-riles.xyz
-      secretName: tls-authentik-ingress-http
-  rules:
-    - host: "authentik.dev-riles.xyz"
-      http:
-        paths:
-          - path: "/"
-            pathType: Prefix
-            backend:
-              service:
-                name: authentik
-                port:
-                  name: http
