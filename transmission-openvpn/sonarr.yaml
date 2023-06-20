@@ -37,7 +37,7 @@ spec:
         - name: nfs-data-old
           nfs:
             server: drebin.riles.xyz
-            path: /tank/transmission
+            path: /home/reilly/transmission
             readOnly: true
         - name: nfs-data
           nfs:
