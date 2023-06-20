@@ -26,6 +26,8 @@ spec:
           volumeMounts:
             - mountPath: /data
               name: nfs-data
+            - mountPath: /old-data
+              name: nfs-data-old
             - mountPath: /var/cache/jellyfin
               name: jf-cache
             - mountPath: /etc/jellyfin
@@ -51,6 +53,11 @@ spec:
           nfs:
             server: drebin.riles.xyz
             path: /tank/transmission_k8s_data
+            readOnly: true
+        - name: nfs-data-old
+          nfs:
+            server: drebin.riles.xyz
+            path: tank/transmission
             readOnly: true
         - name: jf-cache
           nfs:
