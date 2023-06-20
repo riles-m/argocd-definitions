@@ -46,7 +46,7 @@ spec:
           nfs:
             server: drebin.riles.xyz
             path: /home/reilly/transmission
-            readOnly: true
+            readOnly: false
 ---
 apiVersion: v1
 kind: Service
