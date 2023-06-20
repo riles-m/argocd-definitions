@@ -30,8 +30,15 @@ spec:
               name: readarr-config
             - mountPath: /data
               name: nfs-data
+            - mountPath: /old-data
+              name: nfs-data-old
       restartPolicy: Always
       volumes:
+        - name: nfs-data-old
+          nfs:
+            server: drebin.riles.xyz
+            path: tank/transmission
+            readOnly: true
         - name: readarr-config
           persistentVolumeClaim:
             claimName: readarr-config
