@@ -24,8 +24,6 @@ spec:
         - name: jellyfin
           image: "docker.io/linuxserver/jellyfin:10.8.10"
           volumeMounts:
-            - mountPath: /config
-              name: config
             - mountPath: /data
               name: nfs-data
             - mountPath: /var/cache/jellyfin
@@ -49,10 +47,6 @@ spec:
             httpGet:
               port: http
       volumes:
-        - name: config
-          nfs:
-            path: /tank/jellfyin_nfs_config
-            server: drebin.riles.xyz
         - name: nfs-data
           nfs:
             server: drebin.riles.xyz
