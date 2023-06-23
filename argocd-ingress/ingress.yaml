@@ -17,7 +17,7 @@ spec:
             service:
               name: argocd-server
               port:
-                number: 9091
+                number: 80
   tls:
   - hosts:
     - argocd.dev-riles.xyz
