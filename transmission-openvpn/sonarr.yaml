@@ -45,8 +45,10 @@ spec:
             path: /tank/transmission_k8s_data
             readOnly: false
         - name: sonarr-config
-          persistentVolumeClaim:
-            claimName: sonarr-config
+          nfs:
+            server: drebin.riles.xyz
+            path: /ssd_pool/sonarr-config
+            readOnly: false
 ---
 apiVersion: v1
 kind: Service
@@ -59,17 +61,6 @@ spec:
       targetPort: 8989
   selector:
     app: sonarr
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: sonarr-config
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 2Gi
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
