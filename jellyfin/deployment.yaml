@@ -62,16 +62,16 @@ spec:
         - name: jf-cache
           nfs:
             server: drebin.riles.xyz
-            path: /tank/jellyfin_cache_dir
+            path: /ssd_pool/jellyfin_cache_dir
         - name: jf-logs
           nfs:
             server: drebin.riles.xyz
-            path: /tank/jellyfin_log_dir
+            path: /ssd_pool/jellyfin_log_dir
         - name: jf-data
           nfs:
             server: drebin.riles.xyz
-            path: /tank/jellyfin_data_dir
+            path: /ssd_pool/jellyfin_data_dir
         - name: jf-config
           nfs:
             server: drebin.riles.xyz
-            path: /tank/jellyfin_config_dir
+            path: /ssd_pool/jellyfin_config_dir
