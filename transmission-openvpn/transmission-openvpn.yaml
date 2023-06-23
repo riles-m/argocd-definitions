@@ -30,7 +30,6 @@ spec:
           ports:
             - containerPort: 9091
           securityContext:
-            runAsNonRoot: true
             runAsUser: 1000
             capabilities:
               add:
