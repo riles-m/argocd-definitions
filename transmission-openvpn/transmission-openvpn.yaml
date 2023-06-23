@@ -40,9 +40,6 @@ spec:
               name: nfs-data
       restartPolicy: Always
       volumes:
-        - name: transmission-openvpn-config
-          persistentVolumeClaim:
-            claimName: transmission-openvpn-config
         - name: nfs-data
           nfs:
             server: drebin.riles.xyz
