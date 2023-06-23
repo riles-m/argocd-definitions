@@ -32,13 +32,16 @@ spec:
               name: nfs-data
       restartPolicy: Always
       volumes:
-        - name: readarr-config
-          persistentVolumeClaim:
-            claimName: readarr-config
         - name: nfs-data
           nfs:
             server: drebin.riles.xyz
             path: /tank/transmission_k8s_data
+            readOnly: false
+      volumes:
+        - name: readarr-config
+          nfs:
+            server: drebin.riles.xyz
+            path: /ssd_pool/readarr-config
             readOnly: false
 ---
 apiVersion: v1
@@ -52,17 +55,6 @@ spec:
       targetPort: 8787
   selector:
     app: readarr
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: readarr-config
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 2Gi
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
