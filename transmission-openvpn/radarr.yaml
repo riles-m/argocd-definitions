@@ -34,9 +34,6 @@ spec:
               name: nfs-data-old
       restartPolicy: Always
       volumes:
-        - name: radarr-config
-          persistentVolumeClaim:
-            claimName: radarr-config
         - name: nfs-data
           nfs:
             server: drebin.riles.xyz
