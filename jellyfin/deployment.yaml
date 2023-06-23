@@ -28,13 +28,13 @@ spec:
               name: nfs-data
             - mountPath: /home/reilly/transmission
               name: nfs-data-old
-            - mountPath: /var/cache/jellyfin
+            - mountPath: /config/cache
               name: jf-cache
             - mountPath: /etc/jellyfin
               name: jf-config
-            - mountPath: /var/lib/jellyfin
+            - mountPath: /config/data
               name: jf-data
-            - mountPath: /var/log/jellyfin
+            - mountPath: /config/log
               name: jf-logs
           envFrom:
             - configMapRef:
