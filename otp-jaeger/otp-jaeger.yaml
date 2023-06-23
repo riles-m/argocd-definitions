@@ -32,3 +32,26 @@ apiVersion: jaegertracing.io/v1
 kind: Jaeger
 metadata:
   name: jaeger-all-in-one
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: traces
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    certmanager.k8s.io/cluster-issuer: "letsencrypt-production"
+    external-dns.alpha.kubernetes.io/hostname: jaeger.riles.xyz.
+    certmanager.k8s.io/acme-challenge-type: http01
+spec:
+  tls:
+  - hosts:
+    - jaeger.dev-riles.xyz
+    secretName: traces-domain-tls
+  rules:
+  - host: jaeger.dev-riles.xyz
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: jaeger-query
+          servicePort: 16686
