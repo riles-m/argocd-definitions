@@ -30,19 +30,10 @@ spec:
       restartPolicy: Always
       volumes:
         - name: prowlarr-config
-          persistentVolumeClaim:
-            claimName: prowlarr-config
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: prowlarr-config
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 100Mi
+          nfs:
+            server: drebin.riles.xyz
+            path: /ssd_pool/prowlarr-config
+            readOnly: false
 ---
 apiVersion: v1
 kind: Service
