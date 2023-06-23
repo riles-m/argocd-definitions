@@ -37,7 +37,6 @@ spec:
             server: drebin.riles.xyz
             path: /tank/transmission_k8s_data
             readOnly: false
-      volumes:
         - name: readarr-config
           nfs:
             server: drebin.riles.xyz
