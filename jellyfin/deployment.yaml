@@ -27,8 +27,6 @@ spec:
             - mountPath: /data
               name: nfs-data
             - mountPath: /home/reilly/transmission
-              name: nfs-data-old
-            - mountPath: /config/cache
               name: jf-cache
             - mountPath: /etc/jellyfin
               name: jf-config
