@@ -16,9 +16,9 @@ spec:
         - name: transmission-openvpn
           env:
             - name: PGID
-              value: "1000"
+              value: "65534"
             - name: PUID
-              value: "1000"
+              value: "65534"
             - name: TZ
               value: America/New_York
             - name: TRANSMISSION_DOWNLOAD_QUEUE_SIZE
