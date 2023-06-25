@@ -30,15 +30,6 @@ spec:
               name: nfs-data-old
             - mountPath: /config
               name: jf-config
-            - mountPath: /config/cache
-              name: jf-config
-              subPath: cache
-            - mountPath: /config/data
-              name: jf-config
-              subPath: data
-            - mountPath: /config/log
-              name: jf-config
-              subPath: logs
           envFrom:
             - configMapRef:
                 name: jellyfin
