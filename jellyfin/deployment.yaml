@@ -28,14 +28,17 @@ spec:
               name: nfs-data
             - mountPath: /home/reilly/transmission
               name: nfs-data-old
-            - mountPath: /config/cache
-              name: jf-cache
-            - mountPath: /etc/jellyfin
+            - mountPath: /config
               name: jf-config
+            - mountPath: /config/cache
+              name: jf-config
+              subPath: cache
             - mountPath: /config/data
-              name: jf-data
+              name: jf-config
+              subPath: data
             - mountPath: /config/log
-              name: jf-logs
+              name: jf-config
+              subPath: logs
           envFrom:
             - configMapRef:
                 name: jellyfin
@@ -59,18 +62,6 @@ spec:
             server: drebin.riles.xyz
             path: /home/reilly/transmission
             readOnly: true
-        - name: jf-cache
-          nfs:
-            server: drebin.riles.xyz
-            path: /ssd_pool/jellyfin_cache_dir
-        - name: jf-logs
-          nfs:
-            server: drebin.riles.xyz
-            path: /ssd_pool/jellyfin_log_dir
-        - name: jf-data
-          nfs:
-            server: drebin.riles.xyz
-            path: /ssd_pool/jellyfin_data_dir
         - name: jf-config
           nfs:
             server: drebin.riles.xyz
