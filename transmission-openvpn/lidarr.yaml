@@ -15,9 +15,9 @@ spec:
       containers:
         - env:
             - name: PGID
-              value: "1000"
+              value: "65543"
             - name: PUID
-              value: "1000"
+              value: "65543"
             - name: TZ
               value: America/New_York
           image: linuxserver/lidarr
