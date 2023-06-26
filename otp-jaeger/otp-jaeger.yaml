@@ -57,5 +57,7 @@ spec:
       - path: /
         pathType: Prefix
         backend:
-          serviceName: jaeger-all-in-one-query
-          servicePort: 16686
+          service:
+            name: jaeger-all-in-one-query
+            port:
+              number: 16686
