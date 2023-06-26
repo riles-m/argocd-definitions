@@ -40,13 +40,13 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: "nginx"
     certmanager.k8s.io/cluster-issuer: "letsencrypt-production"
-    external-dns.alpha.kubernetes.io/hostname: jaeger.riles.xyz.
+    external-dns.alpha.kubernetes.io/hostname: jaeger.dev-riles.xyz.
     certmanager.k8s.io/acme-challenge-type: http01
 spec:
   tls:
   - hosts:
     - jaeger.dev-riles.xyz
-    secretName: traces-domain-tls
+    secretName: jaeger-domain-tls
   rules:
   - host: jaeger.dev-riles.xyz
     http:
