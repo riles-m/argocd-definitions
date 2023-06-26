@@ -32,6 +32,10 @@ apiVersion: jaegertracing.io/v1
 kind: Jaeger
 metadata:
   name: jaeger-all-in-one
+spec:
+  query:
+    ingress:
+      enabled: false
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
