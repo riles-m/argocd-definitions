@@ -49,7 +49,7 @@ spec:
   tls:
   - hosts:
     - jaeger.dev-riles.xyz
-    secretName: jaeger-domain-tls
+    secretName: tls-jaeger-ingress-http
   rules:
   - host: jaeger.dev-riles.xyz
     http:
