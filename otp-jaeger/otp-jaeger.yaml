@@ -52,6 +52,7 @@ spec:
     http:
       paths:
       - path: /
+        pathType: Prefix
         backend:
           serviceName: jaeger-query
           servicePort: 16686
