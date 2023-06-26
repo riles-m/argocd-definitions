@@ -41,7 +41,6 @@ metadata:
     kubernetes.io/ingress.class: "nginx"
     certmanager.k8s.io/cluster-issuer: le-example-http
     external-dns.alpha.kubernetes.io/hostname: jaeger.dev-riles.xyz.
-    certmanager.k8s.io/acme-challenge-type: http01
 spec:
   tls:
   - hosts:
