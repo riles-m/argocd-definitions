@@ -44,14 +44,14 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
     certmanager.k8s.io/cluster-issuer: le-example-http
-    external-dns.alpha.kubernetes.io/hostname: jaeger.dev-riles.xyz.
+    external-dns.alpha.kubernetes.io/hostname: jaeger-query.dev-riles.xyz.
 spec:
   tls:
   - hosts:
-    - jaeger.dev-riles.xyz
-    secretName: tls-jaeger-ingress-http
+    - jaeger-query.dev-riles.xyz
+    secretName: tls-jaeger-query-ingress-http
   rules:
-  - host: jaeger.dev-riles.xyz
+  - hosts: jaeger-query.dev-riles.xyz
     http:
       paths:
       - path: /
