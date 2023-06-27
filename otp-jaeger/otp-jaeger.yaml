@@ -51,7 +51,7 @@ spec:
     - jaeger-query.dev-riles.xyz
     secretName: tls-jaeger-query-ingress-http
   rules:
-  - hosts: jaeger-query.dev-riles.xyz
+  - host: jaeger-query.dev-riles.xyz
     http:
       paths:
       - path: /
