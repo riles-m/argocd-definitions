@@ -43,7 +43,7 @@ metadata:
   name: jaeger-query
   annotations:
     kubernetes.io/ingress.class: nginx
-    certmanager.k8s.io/cluster-issuer: le-example-http
+    certmanager.io/cluster-issuer: le-example-http
     external-dns.alpha.kubernetes.io/hostname: jaeger-query.dev-riles.xyz.
 spec:
   tls:
