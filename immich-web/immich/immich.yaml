@@ -1066,7 +1066,9 @@ spec:
         nodeAffinity:
           
       securityContext:
-        fsGroup: 1001
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
       hostNetwork: false
       hostIPC: false
       initContainers:
@@ -1074,10 +1076,6 @@ spec:
         - name: postgresql
           image: docker.io/bitnami/postgresql:14.5.0-debian-11-r6
           imagePullPolicy: "IfNotPresent"
-          securityContext:
-            runAsUser: 65534
-            runAsGroup: 65534
-            fsGroup: 65534
           env:
             - name: BITNAMI_DEBUG
               value: "false"
