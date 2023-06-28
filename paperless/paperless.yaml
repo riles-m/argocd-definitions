@@ -184,11 +184,11 @@ spec:
         - name: storage-volume-data
           nfs:
             server: drebin.riles.xyz
-            path: /ssd/paperless-storage-data
+            path: /ssd_pool/paperless-storage-data
         - name: storage-volume-media
           nfs:
             server: drebin.riles.xyz
-            path: /ssd/paperless-storage-media
+            path: /ssd_pool/paperless-storage-media
         - name: consumption-volume
           emptyDir: {}
         - name: export-volume
