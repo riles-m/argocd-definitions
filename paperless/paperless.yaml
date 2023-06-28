@@ -157,9 +157,9 @@ spec:
               value: /consumption
             - name: PAPERLESS_REDIS
               value: redis://ppless-redis:6379
-            envFrom:
-            - secretRef:
-                name: paperless-secret
+          envFrom:
+          - secretRef:
+              name: paperless-secret
           volumeMounts:
             - name: storage-volume-data
               mountPath: /usr/src/paperless/data
