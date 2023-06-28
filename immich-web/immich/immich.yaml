@@ -1097,7 +1097,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: immich-secret
-                  key: PG_PASSWORD
+                  key: PG_POSTGRESS_PASSWORD
             - name: POSTGRES_DB
               value: "immich"
             # Replication
