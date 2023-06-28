@@ -143,21 +143,23 @@ spec:
               containerPort: 8000
               protocol: "TCP"
           env:
-            - name: "TZ"
-              value: "America/Toronto"
+            - name: TZ
+              value: America/Toronto
             - name: PAPERLESS_TIME_ZONE
-              value: "America/Toronto"
+              value: America/Toronto
+            - name: PAPERLESS_CORS_ALLOWED_HOSTS
+              value: https://paperless.riles.xyz
+            - name: PAPERLESS_CSRF_TRUSTED_ORIGINS
+              value: https://paperless.riles.xyz
             - name: PAPERLESS_URL
-              value: "https://paperless.riles.xyz"
+              value: https://paperless.riles.xyz
             - name: PAPERLESS_CONSUMPTION_DIR
               value: /consumption
             - name: PAPERLESS_REDIS
               value: redis://ppless-redis:6379
-            - name: PAPERLESS_SECRET_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: paperless-secret
-                  key: PAPERLESS_SECRET_KEY
+            envFrom:
+            - secretRef:
+                name: paperless-secret
           volumeMounts:
             - name: storage-volume-data
               mountPath: /usr/src/paperless/data
@@ -274,6 +276,8 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: le-example-http
     kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      client_max_body_size 5tb;
 spec:
   rules:
   - host: "paperless.riles.xyz"
