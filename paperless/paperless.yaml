@@ -147,6 +147,8 @@ spec:
               value: "America/Toronto"
             - name: PAPERLESS_TIME_ZONE
               value: "America/Toronto"
+            - name: PAPERLESS_URL
+              value: "paperless.riles.xyz"
             - name: PAPERLESS_CONSUMPTION_DIR
               value: /consumption
             - name: PAPERLESS_REDIS
