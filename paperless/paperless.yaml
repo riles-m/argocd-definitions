@@ -1,0 +1,290 @@
+---
+# Source: paperless/templates/role.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: ppless
+  labels:
+    helm.sh/chart: paperless-4.1.0
+    app.kubernetes.io/name: ppless
+    app.kubernetes.io/instance: ppless
+    app.kubernetes.io/version: "1.14.5"
+    app.kubernetes.io/managed-by: Helm
+rules:
+  - apiGroups: ['']
+    verbs: ['list']
+    resources:
+      - pods
+  - apiGroups: ['apps']
+    verbs: ['get']
+    resources:
+      - deployments
+  - apiGroups: ['']
+    verbs: ['create']
+    resources:
+      - pods/exec
+---
+# Source: paperless/templates/rolebinding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: ppless
+  labels:
+    helm.sh/chart: paperless-4.1.0
+    app.kubernetes.io/name: ppless
+    app.kubernetes.io/instance: ppless
+    app.kubernetes.io/version: "1.14.5"
+    app.kubernetes.io/managed-by: Helm
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: ppless
+subjects:
+  - kind: ServiceAccount
+    name: default
+    namespace: paperless
+---
+# Source: paperless/charts/redis/templates/headless-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: ppless-redis-headless
+  labels:
+    helm.sh/chart: redis-1.1.3
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/instance: ppless
+    app.kubernetes.io/version: "7.0.9"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  clusterIP: None
+  ports:
+    - name: "http"
+      port: 6379
+      targetPort: "http"
+      protocol: "TCP"
+  selector:
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/instance: ppless
+---
+# Source: paperless/charts/redis/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: ppless-redis
+  labels:
+    helm.sh/chart: redis-1.1.3
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/instance: ppless
+    app.kubernetes.io/version: "7.0.9"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - name: "http"
+      port: 6379
+      targetPort: "http"
+      protocol: "TCP"
+  selector:
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/instance: ppless
+---
+# Source: paperless/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: ppless
+  labels:
+    helm.sh/chart: paperless-4.1.0
+    app.kubernetes.io/name: ppless
+    app.kubernetes.io/instance: ppless
+    app.kubernetes.io/version: "1.14.5"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 8000
+      targetPort: http
+      protocol: "TCP"
+  selector:
+    app.kubernetes.io/name: ppless
+    app.kubernetes.io/instance: ppless
+---
+# Source: paperless/templates/controller.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ppless
+  labels:
+    helm.sh/chart: paperless-4.1.0
+    app.kubernetes.io/name: ppless
+    app.kubernetes.io/instance: ppless
+    app.kubernetes.io/version: "1.14.5"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ppless
+      app.kubernetes.io/instance: ppless
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ppless
+        app.kubernetes.io/instance: ppless
+    spec:
+      serviceAccountName: default
+      containers:
+        - name: paperless
+          image: "ghcr.io/paperless-ngx/paperless-ngx:1.14.5"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: "TCP"
+          env:
+            - name: "TZ"
+              value: "America/Toronto"
+            - name: PAPERLESS_TIME_ZONE
+              value: "America/Toronto"
+            - name: PAPERLESS_CONSUMPTION_DIR
+              value: /consumption
+            - name: PAPERLESS_REDIS
+              value: redis://ppless-redis:6379
+            - name: PAPERLESS_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: paperless-secret
+                  key: PAPERLESS_SECRET_KEY
+          volumeMounts:
+            - name: storage-volume-data
+              mountPath: /usr/src/paperless/data
+            - name: storage-volume-media
+              mountPath: /usr/src/paperless/media
+            - name: consumption-volume
+              mountPath: /consumption
+            - name: export-volume
+              mountPath: /export
+          startupProbe:
+            httpGet:
+              path: /
+              port: http
+            failureThreshold: 30
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources: {}
+      volumes:
+        - name: storage-volume-data
+          nfs:
+            server: drebin.riles.xyz
+            path: /ssd/paperless-storage-data
+        - name: storage-volume-media
+          nfs:
+            server: drebin.riles.xyz
+            path: /ssd/paperless-storage-media
+        - name: consumption-volume
+          emptyDir: {}
+        - name: export-volume
+          emptyDir: {}
+---
+# Source: paperless/charts/redis/templates/controller.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ppless-redis
+  labels:
+    helm.sh/chart: redis-1.1.3
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/instance: ppless
+    app.kubernetes.io/version: "7.0.9"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  serviceName: ppless-redis-headless
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: redis
+      app.kubernetes.io/instance: ppless
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: redis
+        app.kubernetes.io/instance: ppless
+    spec:
+      serviceAccountName: default
+      containers:
+        - name: redis
+          image: "redis:7.0.9"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: "http"
+              containerPort: 6379
+              protocol: "TCP"
+          env:
+            - name: "TZ"
+              value: "UTC"
+          args:
+            - 'redis-server'
+            - '--save 60 1'
+            - '--loglevel warning'
+          volumeMounts:
+            - name: ppless-redis-storage
+              mountPath: /data
+          livenessProbe:
+            exec:
+              command:
+                - redis-cli
+                - ping
+          readinessProbe:
+            exec:
+              command:
+                - redis-cli
+                - ping
+          resources: {}
+  volumeClaimTemplates:
+    - metadata:
+        name: ppless-redis-storage
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+        volumeMode: Filesystem
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: jellyfin
+  labels:
+    helm.sh/chart: paperless-4.1.0
+    app.kubernetes.io/name: ppless
+    app.kubernetes.io/instance: ppless
+    app.kubernetes.io/version: "1.14.5"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    cert-manager.io/cluster-issuer: le-example-http
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+  - host: "paperless.riles.xyz"
+    http:
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: ppless
+              port:
+                number: 8000
+  tls:
+  - hosts:
+    - paperless.riles.xyz
+    secretName: tls-paperless-ingress-http
