@@ -647,6 +647,9 @@ spec:
           envFrom:
           - secretRef:
               name: immich-secret
+          volumeMounts:
+            - name: tsdata
+              mountPath: /tsdata
           ports:
             - name: http
               containerPort: 8108
@@ -667,6 +670,11 @@ spec:
             initialDelaySeconds: 0
             periodSeconds: 10
             timeoutSeconds: 1
+      volumes:
+        - name: tsdata
+          nfs:
+            server: drebin.riles.xyz
+            path: /ssd_pool/immich-tsdata
 ---
 # Source: immich/templates/web.yaml
 apiVersion: apps/v1
