@@ -1075,7 +1075,9 @@ spec:
           image: docker.io/bitnami/postgresql:14.5.0-debian-11-r6
           imagePullPolicy: "IfNotPresent"
           securityContext:
-            runAsUser: 1001
+            runAsUser: 65534
+            runAsGroup: 65534
+            fsGroup: 65534
           env:
             - name: BITNAMI_DEBUG
               value: "false"
