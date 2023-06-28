@@ -1088,11 +1088,11 @@ spec:
             # Authentication
             - name: POSTGRES_USER
               value: "immich"
-            - name: POSTGRES_POSTGRES_PASSWORD
+            - name: POSTGRES_POSTGRESS_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: immich-secret
-                  key: PG_PG_POSTGRES-PASSWORD
+                  key: PG_PG_POSTGRESS-PASSWORD
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
