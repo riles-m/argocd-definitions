@@ -1,0 +1,165 @@
+# Source: photoprism/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: environment
+  labels:
+    app.kubernetes.io/name: photoprism
+    helm.sh/chart: photoprism-1.3.1
+    app.kubernetes.io/instance: photoprism
+    app.kubernetes.io/version: "20211215"
+    app.kubernetes.io/managed-by: Helm
+data:
+  PHOTOPRISM_DEBUG: "true"
+  PHOTOPRISM_PUBLIC: "false"
+  PHOTOPRISM_READONLY: "true"
+---
+# Source: photoprism/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: storage
+  labels:
+    app.kubernetes.io/name: photoprism
+    helm.sh/chart: photoprism-1.3.1
+    app.kubernetes.io/instance: photoprism
+    app.kubernetes.io/version: "20211215"
+    app.kubernetes.io/managed-by: Helm
+data:
+  PHOTOPRISM_DATABASE_DRIVER: sqlite
+  PHOTOPRISM_ORIGINALS_PATH: /photoprism/originals
+  
+  PHOTOPRISM_STORAGE_PATH: /photoprism/storage
+---
+# Source: photoprism/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: photoprism
+  labels:
+    app.kubernetes.io/name: photoprism
+    helm.sh/chart: photoprism-1.3.1
+    app.kubernetes.io/instance: photoprism
+    app.kubernetes.io/version: "20211215"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: photoprism
+    app.kubernetes.io/instance: photoprism
+---
+# Source: photoprism/templates/statefulset.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: photoprism
+  labels:
+    app.kubernetes.io/name: photoprism
+    helm.sh/chart: photoprism-1.3.1
+    app.kubernetes.io/instance: photoprism
+    app.kubernetes.io/version: "20211215"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: photoprism
+      app.kubernetes.io/instance: photoprism
+  serviceName: photoprism
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: photoprism
+        app.kubernetes.io/instance: photoprism
+    spec:
+      hostUsers: false
+      securityContext:
+        runAsUser: 65532
+        runAsGroup: 65532
+        fsGroup: 65532
+      terminationGracePeriodSeconds: 5
+
+      containers:
+      - name: photoprism
+        image: "photoprism/photoprism:20211215"
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: PHOTOPRISM_HTTP_HOST
+          value: 0.0.0.0
+        - name: PHOTOPRISM_HTTP_PORT
+          value: "2342"
+        envFrom:
+        - configMapRef:
+            name: environment
+        - configMapRef:
+            name: storage
+        - secretRef:
+            name: photoprism-secret
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+        resources:
+            requests:
+              memory: 6Gi
+        ports:
+        - containerPort: 2342
+          name: http
+        volumeMounts:
+        - mountPath: /photoprism/originals
+          name: originals
+          subPath: photos/family
+        - mountPath: /photoprism/storage
+          name: storage
+      volumes:
+      - name: originals
+        nfs:
+          path: /tank/photoprism-media
+          server: drebin.riles.xyz
+      - name: storage
+        nfs:
+          path: /ssd_pool/photoprism-storage
+          server: drebin.riles.xyz
+---
+# Source: photoprism/templates/ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: photoprism
+  labels:
+    app.kubernetes.io/name: photoprism
+    helm.sh/chart: photoprism-1.3.1
+    app.kubernetes.io/instance: photoprism
+    app.kubernetes.io/version: "20211215"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    cert-manager.io/cluster-issuer: le-example-http
+    external-dns.alpha.kubernetes.io/hostname: photoprism.dev-riles.xyz
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: "true"
+spec:
+  tls:
+    - hosts:
+        - photoprism.dev-riles.xyz
+      secretName: photoprism-tls-cert
+  rules:
+    - host: "photoprism.dev-riles.xyz"
+      http:
+        paths:
+          - path:
+            path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: photoprism
+                port:
+                  number: 80
