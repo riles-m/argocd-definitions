@@ -121,10 +121,6 @@ spec:
           name: storage
           subPath: ph_storage
       volumes:
-      - name: originals
-        nfs:
-          path: /tank/photoprism-media
-          server: drebin.riles.xyz
       - name: storage
         nfs:
           path: /ssd_pool/photoprism-storage
