@@ -12,7 +12,7 @@ metadata:
 data:
   PHOTOPRISM_DEBUG: "true"
   PHOTOPRISM_PUBLIC: "false"
-  PHOTOPRISM_READONLY: "true"
+  PHOTOPRISM_READONLY: "false"
 ---
 # Source: photoprism/templates/configmap.yaml
 apiVersion: v1
