@@ -114,16 +114,9 @@ spec:
         - containerPort: 2342
           name: http
         volumeMounts:
-        - mountPath: /photoprism/originals
-          name: originals
-          subPath: photos/family
-        - mountPath: /photoprism/storage
+        - mountPath: /photoprism/
           name: storage
       volumes:
-      - name: originals
-        nfs:
-          path: /tank/photoprism-media
-          server: drebin.riles.xyz
       - name: storage
         nfs:
           path: /ssd_pool/photoprism-storage
