@@ -124,13 +124,13 @@ spec:
           path: /tank/photoprism-media
           server: drebin.riles.xyz
           mountOptions:
-            - noatime
+            - actimeo=0
       - name: storage
         nfs:
           path: /ssd_pool/photoprism-storage
           server: drebin.riles.xyz
           mountOptions:
-            - noatime
+            - actimeo=0
 ---
 # Source: photoprism/templates/ingress.yaml
 apiVersion: networking.k8s.io/v1
