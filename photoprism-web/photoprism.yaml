@@ -115,22 +115,20 @@ spec:
           name: http
         volumeMounts:
         - mountPath: /photoprism/originals
-          name: originals
+          name: storage
+          subPath: ph_originals 
         - mountPath: /photoprism/storage
           name: storage
+          subPath: ph_storage
       volumes:
       - name: originals
         nfs:
           path: /tank/photoprism-media
           server: drebin.riles.xyz
-          mountOptions:
-            - timeo=0
       - name: storage
         nfs:
           path: /ssd_pool/photoprism-storage
           server: drebin.riles.xyz
-          mountOptions:
-            - timeo=0
 ---
 # Source: photoprism/templates/ingress.yaml
 apiVersion: networking.k8s.io/v1
