@@ -70,6 +70,7 @@ metadata:
     cert-manager.io/cluster-issuer: le-example-http
     external-dns.alpha.kubernetes.io/hostname: sonarr.dev-riles.xyz.
     kubernetes.io/ingress.class: nginx
+    nginx.org/websocket-services: sonarr
 spec:
   rules:
   - host: "sonarr.dev-riles.xyz"
