@@ -102,7 +102,7 @@ spec:
           - -service-insight-listen-port=9114
           - -service-insight-tls-secret=
           - -enable-custom-resources=true
-          - -enable-snippets=true
+          - -enable-snippets=false
           - -include-year=false
           - -disable-ipv6=false
           - -enable-tls-passthrough=false
