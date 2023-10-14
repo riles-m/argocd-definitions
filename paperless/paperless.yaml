@@ -42,7 +42,6 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: default
-    namespace: paperless
 ---
 # Source: paperless/charts/redis/templates/headless-service.yaml
 apiVersion: v1
