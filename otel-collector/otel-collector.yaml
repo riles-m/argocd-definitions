@@ -25,6 +25,6 @@ spec:
     service:
       pipelines:
         metrics:
-          exporters: [ vm-otlp ]
-        logs:
           exporters: [ otlp ]
+        logs:
+          exporters: [ elasticsearch ]
