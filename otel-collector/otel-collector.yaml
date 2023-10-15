@@ -4,6 +4,7 @@ metadata:
   name: otel-collector
 spec:
   mode: daemonset
+  hostNetwork: true
   presets:
     logsCollection:
       enabled: true
