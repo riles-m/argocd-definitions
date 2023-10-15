@@ -12,6 +12,10 @@ spec:
       enabled: true
     kubeletMetrics:
       enabled: true
+  receivers:
+    jaeger:
+      protocols:
+        grpc:
   exporters:
     vm-otlp:
       endpoint: http://victoria-metrics-victoria-metrics-single-server.vm.cluster.svc.local:8428/opentelemetry/api/v1/push
