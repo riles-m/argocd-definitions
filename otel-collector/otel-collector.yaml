@@ -19,11 +19,12 @@ spec:
           grpc:
           http:
     exporters:
-      debug
+      debug:
+        verbosity: detailed
       otlphttp:
         endpoint: http://victoria-metrics-victoria-metrics-single-server.vm.cluster.svc.local:8428/opentelemetry/api/v1/push
     service:
       pipelines:
         metrics:
           receivers: [ otlp ]
-          exporters: [ otlphttp ]
+          exporters: [ otlphttp, debug ]
