@@ -20,14 +20,9 @@ spec:
           http:
     exporters:
       otlp:
-        endpoint: victoria-metrics-victoria-metrics-single-server.vm.cluster.svc.local:8428/opentelemetry/api/v1/push
-      elasticsearch:
-        endpoints: victoria-logs-victoria-logs-single-server.vm.cluster.svc.local:9428/insert/elasticsearch/_bulk
+        endpoint: http://victoria-metrics-victoria-metrics-single-server.vm.cluster.svc.local:8428/opentelemetry/api/v1/push
     service:
       pipelines:
         metrics:
           receivers: [ otlp ]
           exporters: [ otlp ]
-        logs:
-          receivers: [ otlp ]
-          exporters: [ elasticsearch ]
