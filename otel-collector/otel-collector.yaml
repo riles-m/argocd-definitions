@@ -18,10 +18,10 @@ spec:
         protocols:
           grpc:
     exporters:
-      vm-otlp:
+      otlp:
         endpoint: http://victoria-metrics-victoria-metrics-single-server.vm.cluster.svc.local:8428/opentelemetry/api/v1/push
-      vm-logs:
-        endpoint: http://victoria-logs-victoria-logs-single-server.vm.cluster.svc.local:9428/opentelemetry/api/v1/push
+      elasticsearch:
+        endpoint: http://victoria-logs-victoria-logs-single-server.vm.cluster.svc.local:9428/insert/elasticsearch/_bulk
     service:
       pipelines:
         metrics:
