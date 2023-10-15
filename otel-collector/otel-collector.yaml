@@ -4,15 +4,15 @@ metadata:
   name: otel-collector
 spec:
   mode: daemonset
+  presets:
+    logsCollection:
+      enabled: true
+      includeCollectorLogs: true
+    kubernetesAttributes:
+      enabled: true
+    kubeletMetrics:
+      enabled: true
   config: |
-    presets:
-      logsCollection:
-        enabled: true
-        includeCollectorLogs: true
-      kubernetesAttributes:
-        enabled: true
-      kubeletMetrics:
-        enabled: true
     receivers:
       jaeger:
         protocols:
