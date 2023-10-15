@@ -13,6 +13,8 @@ spec:
       enabled: true
     kubeletMetrics:
       enabled: true
+    hostMetrics:
+      enabled: true
   config: |
     receivers:
       otlp:
