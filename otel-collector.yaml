@@ -1,0 +1,30 @@
+apiVersion: opentelemetry.io/v1alpha1
+kind: OpenTelemetryCollector
+metadata:
+  name: otel-collector
+spec:
+  mode: daemonset
+  config: |
+    presets:
+      logsCollection:
+        enabled: true
+        includeCollectorLogs: true
+      kubernetesAttributes:
+        enabled: true
+      kubeletMetrics:
+        enabled: true
+    receivers:
+      jaeger:
+        protocols:
+          grpc:
+    exporters:
+      vm-otlp:
+        endpoint: http://victoria-metrics-victoria-metrics-single-server.vm.cluster.svc.local:8428/opentelemetry/api/v1/push
+      vm-logs:
+        endpoint: http://victoria-logs-victoria-logs-single-server.vm.cluster.svc.local:9428/opentelemetry/api/v1/push
+    service:
+      pipelines:
+        metrics:
+          exporters: [ vm-otlp ]
+        logs:
+          exporters: [ otlp ]
