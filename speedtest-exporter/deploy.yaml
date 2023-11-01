@@ -62,5 +62,6 @@ spec:
     targetPort: 9516
   selector:
     app.kubernetes.io/name: speedtest
+    app.kubernetes.io/instance: speedtest
   sessionAffinity: None
   type: ClusterIP
