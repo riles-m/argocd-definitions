@@ -44,3 +44,23 @@ spec:
           requests:
             cpu: 50m
             memory: 20Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+  name: speedtest-expoter
+spec:
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: metrics
+    port: 9516
+    protocol: TCP
+    targetPort: 9516
+  selector:
+    app.kubernetes.io/name: speedtest
+  sessionAffinity: None
+  type: ClusterIP
