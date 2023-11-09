@@ -1,0 +1,52 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: vector
+  namespace: argocd
+spec:
+  destination:
+    namespace: vector
+    server: https://kubernetes.default.svc
+  project: monitoring
+  source:
+    chart: vector
+    helm:
+      values: "role: \"Agent\"\ncustomConfig:\n  data_dir: /vector-data-dir\n  api:\n
+        \   enabled: true\n    address: 127.0.0.1:8686\n    playground: false\n  sources:\n
+        \   long_scrape:\n      type: prometheus_scrape\n      endpoints: \n      -
+        http://speedtest-exporter.speedtest.svc.cluster.local:9516/probe\n      scrape_timeout_secs:
+        120\n      scrape_interval_secs: 300\n    prom_scrape:\n      type: prometheus_scrape\n
+        \     endpoints: \n      - http://kube-state-metrics.kube-state-metrics.svc.cluster.local:8080/metrics\n
+        \     - http://node-exporter-prometheus-node-exporter.node-exporter.svc.cluster.local:9100/metrics\n
+        \     - http://ingress-nginx-controller-metrics.ingress-nginx.svc.cluster.local:10254/metrics\n
+        \     - http://victoria-metrics-victoria-metrics-single-server.vm.svc.cluster.local:8428/metrics\n
+        \     - http://victoria-logs-victoria-logs-single-server.vm.svc.cluster.local:9428/metrics\n
+        \     - http://argocd-server-metrics.argocd.svc.cluster.local:8083/metrics\n
+        \     - http://argocd-metrics.argocd.svc.cluster.local:8082/metrics\n      -
+        http://argocd-applicationset-controller.argocd.svc.cluster.local:8080/metrics\n
+        \     - http://argocd-notifications-controller-metrics.argocd.svc.cluster.local:9001/metrics\n
+        \     - http://argocd-repo-server.argocd.svc.cluster.local:8084/metrics\n
+        \     - http://nextcloud-metrics.nextcloud.svc.cluster.local:9205/metrics\n
+        \   kube_logs:\n      type: kubernetes_logs\n      oldest_first: true\n      self_node_name:
+        drebin.riles.xyz\n  transforms:\n    kube_logs_remapped:\n      type: \"remap\"\n
+        \     inputs:\n        - kube_logs\n      source: |-\n        .log = .message\n
+        \       .time = .timestamp\n        del(.file)\n        del(.message)\n        del(.timestamp_end)\n
+        \       del(.stream)\n        del(.source_type)\n        del(.kubernetes.pod_labels.app)\n
+        \       del(.message)\n  sinks:\n    metrics_to_vm:\n      type: prometheus_remote_write\n
+        \     inputs: [prom_scrape, long_scrape]\n      healthcheck:\n        enabled:
+        false\n      endpoint: http://victoria-metrics-victoria-metrics-single-server.vm.svc.cluster.local:8428/api/v1/write\n
+        \   logs_to_os:\n      type: elasticsearch\n      inputs: [kube_logs_remapped]\n
+        \     api_version: v8\n      mode: bulk\n      auth:\n        strategy: basic\n
+        \       user: admin\n        password: admin\n      tls:\n        verify_certificate:
+        false\n      bulk:\n        index: \"drebin-cluster-logging-%Y.%m.%d\"\n      endpoints:\n
+        \      - https://opensearch-cluster-master.opensearch.svc.cluster.local:9200\n
+        \   logs_to_vm:\n      type: elasticsearch\n      inputs: [kube_logs]\n      mode:
+        bulk\n      api_version: v8\n      healthcheck:\n        enabled: false\n
+        \     endpoints:\n      - http://victoria-logs-victoria-logs-single-server.vm.svc.cluster.local:9428/insert/elasticsearch\n
+        \     query:\n        _msg_field: \"message\"\n        _time_field: \"timestamp\"\n
+        \       _stream_fields: \"kubernetes.container_name,kubernetes.container_name,kubernetes.container_id,kubernetes.pod_ip,kubernetes.pod_name,kubernetes_pod_namespace,kubernetes.pod_owner\"\n"
+    repoURL: https://helm.vector.dev
+    targetRevision: 0.26.0
+  syncPolicy:
+    syncOptions:
+    - createnamespace=true

@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nvidia-device-driver
+  namespace: argocd
+spec:
+  destination:
+    namespace: jellyfin
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: nvidia-device-driver
+    repoURL: https://github.com/riles-m/argocd-definitions
+    targetRevision: HEAD
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true

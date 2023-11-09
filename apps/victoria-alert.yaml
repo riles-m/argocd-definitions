@@ -1,0 +1,60 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: victoria-alert
+  namespace: argocd
+spec:
+  destination:
+    namespace: vm
+    server: https://kubernetes.default.svc
+  project: monitoring
+  source:
+    chart: victoria-metrics-alert
+    helm:
+      values: |
+        server:
+          ingress:
+            enabled: true
+            hosts:
+            - name: vm-alert.dev-riles.xyz
+              path: /
+              pathType: Prefix
+            annotations:
+              cert-manager.io/cluster-issuer: le-example-http
+              kubernetes.io/ingress.class: nginx
+              kubernetes.io/tls-acme: "true"
+            tls:
+              - secretName: vm-tls
+                hosts:
+                  - vm-alert.dev-riles.xyz
+          datasource:
+            url: http://victoria-metrics-victoria-metrics-single-server.vm.svc.cluster.local:8428
+          notifier:
+            alertmanager:
+              url: http://alertmanager.alert.svc.cluster.local:9093
+          config:
+            alerts:
+              groups:
+                    - name: node
+                      rules:
+                      - alert: systemload15_warning
+                        for: 5m
+                        expr: node_load15 > 6
+                        labels:
+                          severity: warning
+                        annotations:
+                          summary: "system load 15 is at 50% of cores"
+                          description: "check cpu/disk load"
+                      - alert: temp_over_60
+                        for: 5s
+                        expr: node_hwmon_temp_celsius > 60
+                        labels:
+                          severity: critical
+                        annotations:
+                          summary: "temp over 60"
+                          description: "check ventilation"
+    repoURL: https://victoriametrics.github.io/helm-charts/
+    targetRevision: 0.8.1
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true

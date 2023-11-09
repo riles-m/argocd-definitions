@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nextcloud
+  namespace: argocd
+spec:
+  destination:
+    namespace: nextcloud
+    server: https://kubernetes.default.svc
+  project: office
+  source:
+    chart: nextcloud
+    plugin:
+      env:
+      - name: HELM_VALUES
+        value: "redis:\n  enabled: false\n  auth:\n    enabled: true\n    password:
+          <path:kv/data/nextcloud#redispw> \nphpClientHttpsFix:\n  enabled: true\nnextcloud:\n
+          \ host: nextcloud.riles.xyz\n  username: <path:kv/data/nextcloud#username>
+          \n  password: <path:kv/data/nextcloud#password> \npersistence:\n  enabled:
+          true\n  storageClass: local-path-ssd\n  nextcloudData:\n    enabled: true\n
+          \   storageClass: local-path-hdd\nimage:\n  flavor: fpm\nnginx:\n  enabled:
+          true\ningress:\n  enabled: true\n  path: /\n  hosts:\n    - nextcloud.riles.xyz\n
+          \ annotations:\n    cert-manager.io/cluster-issuer: le-example-http\n    kubernetes.io/ingress.class:
+          nginx\n    kubernetes.io/tls-acme: \"true\"\n    nginx.ingress.kubernetes.io/enable-cors:
+          \"true\"\n    nginx.ingress.kubernetes.io/cors-allow-headers: \"X-Forwarded-For\"\n
+          \   nginx.ingress.kubernetes.io/proxy-body-size: 4G\n  tls:\n    - secretName:
+          nextcloud-tls\n      hosts:\n        - nextcloud.riles.xyz\n"
+      name: argocd-vault-plugin-helm
+    repoURL: https://nextcloud.github.io/helm/
+    targetRevision: 4.4.0
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true

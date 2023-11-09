@@ -1,0 +1,42 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: harbor
+  namespace: argocd
+spec:
+  destination:
+    namespace: harbor
+    server: https://kubernetes.default.svc
+  project: cicd
+  source:
+    chart: harbor
+    plugin:
+      env:
+      - name: HELM_VALUES
+        value: |
+          secretKey: <path:kv/data/harbor#secretKey>
+          harborAdminPassword: <path:kv/data/harbor#harborAdminPassword>
+          externalURL: https://harbor.riles.xyz
+          expose:
+            type: ingress
+            ingress:
+              annotations:
+                cert-manager.io/cluster-issuer: le-example-http
+                kubernetes.io/tls-acme: "true"
+              hosts:
+                core: harbor.riles.xyz
+          persistence:
+            enabled: true
+            persistentVolumeClaim:
+              registry:
+                storageClass: "local-path-hdd"
+              database:
+                storageClass: "local-path-ssd"
+              trivy:
+                storageClass: "local-path-ssd"
+      name: argocd-vault-plugin-helm
+    repoURL: https://helm.goharbor.io
+    targetRevision: 1.13.1
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true

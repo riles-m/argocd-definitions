@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: opensearch-dashboards
+  namespace: argocd
+spec:
+  destination:
+    namespace: opensearch
+    server: https://kubernetes.default.svc
+  project: monitoring
+  source:
+    chart: opensearch-dashboards
+    helm:
+      values: "opensearchHosts: \"https://opensearch-cluster-master:9200\"\ningress:\n
+        \ enabled: true\n  annotations:                                                       \n
+        \   cert-manager.io/cluster-issuer: le-example-http\n    external-dns.alpha.kubernetes.io/hostname:
+        opensearch.dev-riles.xyz.\n  hosts:\n  - host: opensearch.dev-riles.xyz\n
+        \   paths:\n    - backend:\n        service:\n          name: opensearch-dashboards\n
+        \         port:\n            number: 5601\n      path: /\n      pathType:
+        Prefix\n  tls:\n  - hosts:\n    - opensearch.dev-riles.xyz\n    secretName:
+        tls-opensearch-ingress-http\n"
+    repoURL: https://opensearch-project.github.io/helm-charts/
+    targetRevision: 2.13.0
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true

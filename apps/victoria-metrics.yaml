@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: victoria-metrics
+  namespace: argocd
+spec:
+  destination:
+    namespace: vm
+    server: https://kubernetes.default.svc
+  project: monitoring
+  source:
+    chart: victoria-metrics-single
+    helm:
+      values: |
+        server:
+          persistentVolume:
+            enabled: true
+          ingress:
+            enabled: true
+            hosts:
+            - name: vm.dev-riles.xyz
+              path: /
+              pathType: Prefix
+            annotations:
+              cert-manager.io/cluster-issuer: le-example-http
+              kubernetes.io/ingress.class: nginx
+              kubernetes.io/tls-acme: "true"
+            tls:
+              - secretName: vm-tls
+                hosts:
+                  - vm.dev-riles.xyz
+    repoURL: https://victoriametrics.github.io/helm-charts/
+    targetRevision: 0.9.10
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
