@@ -33,7 +33,7 @@ spec:
         - name: NEXTCLOUD_SERVER
           value: https://nextcloud.riles.xyz
         - name: NEXTCLOUD_TIMEOUT
-          value: 5s
+          value: 15s
         - name: NEXTCLOUD_TLS_SKIP_VERIFY
           value: "false"
         image: xperimental/nextcloud-exporter:0.6.1
