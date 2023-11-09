@@ -2,8 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app.kubernetes.io/component: metrics
-    app.kubernetes.io/instance: nextcloud
+    app.kubernetes.io/instance: nextcloud-metrics
+    app.kubernetes.io/name: nextcloud-metrics
   name: nextcloud-metrics
   namespace: nextcloud
 spec:
@@ -12,9 +12,8 @@ spec:
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      app.kubernetes.io/component: metrics
-      app.kubernetes.io/instance: nextcloud
-      app.kubernetes.io/name: nextcloud
+      app.kubernetes.io/instance: nextcloud-metrics
+      app.kubernetes.io/name: nextcloud-metrics
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -72,7 +71,6 @@ spec:
     protocol: TCP
     targetPort: 9205
   selector:
-    app.kubernetes.io/component: metrics
-    app.kubernetes.io/instance: nextcloud
+    app.kubernetes.io/instance: nextcloud-metrics
     app.kubernetes.io/name: nextcloud-metrics
   type: ClusterIP
