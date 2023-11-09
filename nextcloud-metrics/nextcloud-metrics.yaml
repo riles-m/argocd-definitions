@@ -31,7 +31,7 @@ spec:
         - name: NEXTCLOUD_AUTH_TOKEN
           value: <path:kv/data/nextcloud#serverinfotoken>
         - name: NEXTCLOUD_SERVER
-          value: http://nextcloud.nextcloud.svc.cluster.local:8080
+          value: https://nextcloud.riles.xyz
         - name: NEXTCLOUD_TIMEOUT
           value: 5s
         - name: NEXTCLOUD_TLS_SKIP_VERIFY
