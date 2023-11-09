@@ -22,4 +22,4 @@ spec:
              name: vultr-credentials
            # The ingressClass used to create the necessary ingress routes
            ingress:
-             class: traefik
+             class: nginx
