@@ -23,9 +23,8 @@ spec:
     metadata:
       creationTimestamp: null
       labels:
-        app.kubernetes.io/component: metrics
-        app.kubernetes.io/instance: nextcloud
-        app.kubernetes.io/name: nextcloud
+        app.kubernetes.io/instance: nextcloud-metrics
+        app.kubernetes.io/name: nextcloud-metrics
     spec:
       containers:
       - env:
