@@ -71,6 +71,7 @@ metadata:
     cert-manager.io/cluster-issuer: le-example-http
     external-dns.alpha.kubernetes.io/hostname: transmission-openvpn.dev-riles.xyz.
     kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/proxy-body-size: 50M
 spec:
   rules:
   - host: "transmission-openvpn.dev-riles.xyz"
