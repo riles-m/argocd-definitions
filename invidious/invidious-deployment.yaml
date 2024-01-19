@@ -35,9 +35,9 @@ spec:
         - name: INVIDIOUS_CONFIG
           value: |
             db:
-              dbname: <POSTGRES_DB>
-              user: <POSTGRES_USER>
-              password: <POSTGRES_PASSWORD>
+              dbname: <path:kv/data/invidious#POSTGRES_DB>
+              user: <path:kv/data/invidious#POSTGRES_USER>
+              password: <path:kv/data/invidious#POSTGRES_PASSWORD>
               host: invidious-db.invidious.svc.cluster.local
               port: 5432
             check_tables: true
@@ -45,5 +45,5 @@ spec:
             # domain:
             # https_only: false
             # statistics_enabled: false
-            hmac_key: <HMAC_KEY>
+            hmac_key: <path:kv/data/invidious#HMAC_KEY>
       restartPolicy: Always
