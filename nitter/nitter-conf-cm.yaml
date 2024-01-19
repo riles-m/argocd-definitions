@@ -6,7 +6,7 @@ metadata:
     avp.kubernetes.io/path: "kv/data/nitter"
     avp.kubernetes.io/secret-version: "1"
 type: Opaque
-data:
+stringData:
   nitter-cm.yaml: |
     [Server]
     hostname = "nitter.dev-riles.xyz"  # for generating links, change this to your own domain/ip
