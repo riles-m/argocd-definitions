@@ -35,9 +35,5 @@ spec:
           periodSeconds: 30
           timeoutSeconds: 5
         name: nitter-redis
-        securityContext:
-          capabilities:
-            drop:
-            - ALL
       restartPolicy: Always
       serviceAccountName: ""
