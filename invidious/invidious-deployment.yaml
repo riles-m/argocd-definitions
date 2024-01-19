@@ -34,7 +34,6 @@ spec:
           timeoutSeconds: 5
         ports:
         - containerPort: 3000
-      restartPolicy: Always
         env:
         - name: INVIDIOUS_CONFIG
           value: |
@@ -50,3 +49,4 @@ spec:
             # https_only: false
             # statistics_enabled: false
             hmac_key: $(HMAC_KEY)
+      restartPolicy: Always
