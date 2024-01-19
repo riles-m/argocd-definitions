@@ -1,9 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    avp.kubernetes.io/path: "kv/data/invidious"
-    avp.kubernetes.io/secret-version: "2"
   labels:
     io.kompose.service: invidious
   name: invidious
@@ -15,6 +12,9 @@ spec:
   strategy: {}
   template:
     metadata:
+      annotations:
+        avp.kubernetes.io/path: "kv/data/invidious"
+        avp.kubernetes.io/secret-version: "2"
       labels:
         io.kompose.service: invidious
     spec:
