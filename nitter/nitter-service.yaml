@@ -22,6 +22,7 @@ spec:
   ports:
   - name: "6379"
     port: 6379
+    protocol: TCP
     targetPort: 6379
   selector:
     io.kompose.service: nitter

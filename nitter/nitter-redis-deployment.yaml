@@ -19,14 +19,11 @@ spec:
       containers:
       - args:
         - redis-server
-        - --save
-        - "60"
-        - "1"
         - --loglevel
         - warning
         ports:
         - containerPort: 6379
-        image: redis:6-alpine
+        image: redis:7
         livenessProbe:
           exec:
             command:
