@@ -1,0 +1,16 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nitter
+  namespace: argocd
+spec:
+  destination:
+    namespace: nitter
+    server: https://kubernetes.default.svc
+  project: media
+  source:
+    path: nitter
+    plugin:
+      name: argocd-vault-plugin
+    repoURL: https://github.com/riles-m/argocd-definitions
+    targetRevision: HEAD
