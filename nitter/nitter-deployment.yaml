@@ -42,5 +42,6 @@ spec:
       - name: nitter-config
         secret:
           secretName: nitter-conf
-            - key: nitter-config
-              path: nitter.conf
+          items:
+          - key: nitter-config
+            path: nitter.conf
