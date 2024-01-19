@@ -11,3 +11,17 @@ spec:
     targetPort: 8080
   selector:
     io.kompose.service: nitter
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    io.kompose.service: nitter-redis
+  name: nitter-redis
+spec:
+  ports:
+  - name: "6379"
+    port: 6379
+    targetPort: 6379
+  selector:
+    io.kompose.service: nitter

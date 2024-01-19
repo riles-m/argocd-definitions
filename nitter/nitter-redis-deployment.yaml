@@ -24,6 +24,8 @@ spec:
         - "1"
         - --loglevel
         - warning
+        ports:
+        - containerPort: 6379
         image: redis:6-alpine
         livenessProbe:
           exec:
