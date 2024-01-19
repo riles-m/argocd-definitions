@@ -30,7 +30,7 @@ spec:
               dbname: $(POSTGRES_DB)
               user: $(POSTGRESS_USER)
               password: $(POSTGRES_PASSWORD)
-              host: invidious-db
+              host: invidious-db.invidious.svc.cluster.local
               port: 5432
             check_tables: true
             # external_port:
