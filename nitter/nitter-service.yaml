@@ -25,4 +25,4 @@ spec:
     protocol: TCP
     targetPort: 6379
   selector:
-    io.kompose.service: nitter
+    io.kompose.service: nitter-redis
