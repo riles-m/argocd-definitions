@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    avp.kubernetes.io/path: "kv/data/invidious"
+    avp.kubernetes.io/secret-version: "1"
+  labels:
+    io.kompose.service: invidious
+  name: invidious
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: invidious
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        io.kompose.service: invidious
+    spec:
+      containers:
+      - name: invidious
+        envFrom:
+        - secretRef:
+            name: invidious-secret
+        env:
+        - name: INVIDIOUS_CONFIG
+          value: |
+            db:
+              dbname: $(POSTGRES_DB)
+              user: $(POSTGRESS_USER)
+              password: $(POSTGRES_PASSWORD)
+              host: invidious-db
+              port: 5432
+            check_tables: true
+            # external_port:
+            # domain:
+            # https_only: false
+            # statistics_enabled: false
+            hmac_key: $(HMAC_KEY)
+        image: quay.io/invidious/invidious:latest
+        livenessProbe:
+          exec:
+            command:
+            - wget -nv --tries=1 --spider http://127.0.0.1:3000/api/v1/comments/jNQXAC9IVRw
+              || exit 1
+          failureThreshold: 2
+          periodSeconds: 30
+          timeoutSeconds: 5
+        ports:
+        - containerPort: 3000
+      restartPolicy: Always
