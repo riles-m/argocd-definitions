@@ -20,7 +20,8 @@ spec:
       - image: zedeus/nitter:latest
         livenessProbe:
           exec:
-            command: - wget -nv --tries=1 --spider http://127.0.0.1:8080/Jack/status/20 || exit 1
+            command:
+            - wget -nv --tries=1 --spider http://127.0.0.1:8080/Jack/status/20 || exit 1
           failureThreshold: 2
           periodSeconds: 30
           timeoutSeconds: 5
