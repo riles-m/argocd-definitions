@@ -23,6 +23,18 @@ spec:
         envFrom:
         - secretRef:
             name: invidious-secret
+        image: quay.io/invidious/invidious:latest
+        livenessProbe:
+          exec:
+            command:
+            - wget -nv --tries=1 --spider http://127.0.0.1:3000/api/v1/comments/jNQXAC9IVRw
+              || exit 1
+          failureThreshold: 2
+          periodSeconds: 30
+          timeoutSeconds: 5
+        ports:
+        - containerPort: 3000
+      restartPolicy: Always
         env:
         - name: INVIDIOUS_CONFIG
           value: |
@@ -38,15 +50,3 @@ spec:
             # https_only: false
             # statistics_enabled: false
             hmac_key: $(HMAC_KEY)
-        image: quay.io/invidious/invidious:latest
-        livenessProbe:
-          exec:
-            command:
-            - wget -nv --tries=1 --spider http://127.0.0.1:3000/api/v1/comments/jNQXAC9IVRw
-              || exit 1
-          failureThreshold: 2
-          periodSeconds: 30
-          timeoutSeconds: 5
-        ports:
-        - containerPort: 3000
-      restartPolicy: Always
