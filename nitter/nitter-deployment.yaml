@@ -36,11 +36,10 @@ spec:
             - ALL
         volumeMounts:
         - mountPath: /src/nitter.conf
-          name: nitter-claim0
+          name: nitter-config
           readOnly: true
       restartPolicy: Always
       volumes:
-      - name: nitter-claim0
-        persistentVolumeClaim:
-          claimName: nitter-claim0
-          readOnly: true
+      - name: nitter-config
+        secret:
+          secretName: nitter-conf

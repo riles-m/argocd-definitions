@@ -37,12 +37,5 @@ spec:
           capabilities:
             drop:
             - ALL
-        volumeMounts:
-        - mountPath: /data
-          name: nitter-redis
       restartPolicy: Always
       serviceAccountName: ""
-      volumes:
-      - name: nitter-redis
-        persistentVolumeClaim:
-          claimName: nitter-redis

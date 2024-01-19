@@ -21,4 +21,4 @@ spec:
   tls:
   - hosts:
     - invidious.dev-riles.xyz
-    secretName: tls-sonarr-ingress-http
+    secretName: tls-invidious-ingress-http
