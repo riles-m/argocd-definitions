@@ -36,7 +36,7 @@ spec:
           value: |
             db:
               dbname: <POSTGRES_DB>
-              user: POSTGRES_USER
+              user: <POSTGRES_USER>
               password: <POSTGRES_PASSWORD>
               host: invidious-db.invidious.svc.cluster.local
               port: 5432
