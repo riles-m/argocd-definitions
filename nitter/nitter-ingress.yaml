@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nitter
+  annotations:
+    cert-manager.io/cluster-issuer: le-example-http
+    external-dns.alpha.kubernetes.io/hostname: nitter.dev-riles.xyz.
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+  - host: "nitter.dev-riles.xyz"
+    http:
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: nitter
+              port:
+                number: 8080
+  tls:
+  - hosts:
+    - nitter.dev-riles.xyz
+    secretName: tls-nitter-ingress-http

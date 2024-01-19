@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    io.kompose.service: nitter-claim0
+  name: nitter-claim0
+spec:
+  storageClassName: local-path-ssd
+  accessModes:
+  - ReadOnlyMany
+  resources:
+    requests:
+      storage: 100Mi

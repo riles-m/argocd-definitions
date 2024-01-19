@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: nitter-redis
+  name: nitter-redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: nitter-redis
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        io.kompose.service: nitter-redis
+    spec:
+      containers:
+      - args:
+        - redis-server
+        - --save
+        - "60"
+        - "1"
+        - --loglevel
+        - warning
+        image: redis:6-alpine
+        livenessProbe:
+          exec:
+            command:
+            - redis-cli ping
+          failureThreshold: 2
+          periodSeconds: 30
+          timeoutSeconds: 5
+        name: nitter-redis
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+        volumeMounts:
+        - mountPath: /data
+          name: nitter-redis
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+      - name: nitter-redis
+        persistentVolumeClaim:
+          claimName: nitter-redis

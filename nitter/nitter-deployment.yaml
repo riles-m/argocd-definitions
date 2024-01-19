@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: nitter
+  name: nitter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: nitter
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        io.kompose.service: nitter
+    spec:
+      containers:
+      - image: zedeus/nitter:latest
+        livenessProbe:
+          exec:
+            command:
+            - wget -nv --tries=1 --spider http://127.0.0.1:8080/Jack/status/20 ||
+              exit 1
+          failureThreshold: 2
+          periodSeconds: 30
+          timeoutSeconds: 5
+        name: nitter
+        ports:
+        - containerPort: 8080
+        resources: {}
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+        volumeMounts:
+        - mountPath: /src/nitter.conf
+          name: nitter-claim0
+          readOnly: true
+      restartPolicy: Always
+      volumes:
+      - name: nitter-claim0
+        persistentVolumeClaim:
+          claimName: nitter-claim0
+          readOnly: true
