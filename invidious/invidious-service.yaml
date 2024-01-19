@@ -11,3 +11,16 @@ spec:
     targetPort: 3000
   selector:
     io.kompose.service: invidious
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    io.kompose.service: invidious-db
+  name: invidious-db
+spec:
+  ports:
+  - name: "5432"
+    port: 5432
+    targetPort: 5432
+  selector:
+    io.kompose.service: invidious-db

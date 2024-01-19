@@ -27,7 +27,8 @@ spec:
           exec:
             command:
             - pg_isready -U $POSTGRES_USER -d $POSTGRES_DB
-        resources: {}
+        ports:
+        - containerPort: 5432
         volumeMounts:
         - mountPath: /var/lib/postgresql/data
           name: postgresdata
