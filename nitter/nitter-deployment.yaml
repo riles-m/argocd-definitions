@@ -18,6 +18,9 @@ spec:
     spec:
       containers:
       - image: zedeus/nitter:latest
+        env:
+          - name: NITTER_CONF_FILE
+            value: /etc/nitter/nitter.conf
         livenessProbe:
           exec:
             command:
