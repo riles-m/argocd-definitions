@@ -30,7 +30,7 @@ spec:
               cert-manager.io/cluster-issuer: le-example-http
               kubernetes.io/ingress.class: nginx
               kubernetes.io/tls-acme: "true"
-    repoURL: oci://ghcr.io/oben01/charts
+    repoURL: https://oben01.github.com/charts
     targetRevision: 2.0.2 
     chart: dashdot
   syncPolicy:
