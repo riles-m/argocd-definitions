@@ -1,0 +1,51 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: home-assistant
+  namespace: argocd
+spec:
+  destination:
+    namespace: home-assistant
+    server: https://kubernetes.default.svc
+  project: office
+  source:
+    repoURL: https://k8s-at-home.com/charts
+    targetRevision: 13.4.2
+    chart: home-assistant
+    helm:
+      values: |
+        image:
+          repository: ghcr.io/home-assistant/home-assistant
+          tag: latest
+          pullPolicy: IfNotPresent
+        hostNetwork: false
+        securityContext:
+          privileged: true
+        env:
+          TZ: America/Toronto
+        persistence:
+          config:
+            enabled: true
+        usb:
+          enabled: true
+          type: hostPath
+          hostPath: /sys/bus/usb/devices/1-3
+        metrics:
+          enabled: true
+        ingress:
+          main:
+            enabled: true
+            hosts:
+              - host: home-assistant.dev-riles.xyz
+                paths:
+                  - path: /
+            annotations:
+              cert-manager.io/cluster-issuer: le-example-http
+              kubernetes.io/ingress.class: nginx
+              kubernetes.io/tls-acme: "true"
+              nginx.org/websocket-services: home-assistant
+            tls:
+              - secretName: home-assistant-tls
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
