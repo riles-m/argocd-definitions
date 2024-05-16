@@ -58,7 +58,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: radarr
+  name: radarr-uhd
   annotations:
     cert-manager.io/cluster-issuer: le-example-http
     external-dns.alpha.kubernetes.io/hostname: radarr-uhd.dev-riles.xyz.
