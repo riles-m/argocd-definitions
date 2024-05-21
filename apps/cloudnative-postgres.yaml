@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cnpg-operator
+  namespace: argocd
+spec:
+  destination:
+    namespace: cnpg-system
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    chart: cnpg
+    repoURL: https://cloudnative-pg.github.io/charts
+    targetRevision: 0.21.2
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: arr-pg
+  namespace: argocd
+spec:
+  destination:
+    namespace: arr
+    server: https://kubernetes.default.svc
+  project: media
+  source:
+    path: postgres-cluster
+    repoURL: https://github.com/riles-m/argocd-definitions
+    targetRevision: HEAD

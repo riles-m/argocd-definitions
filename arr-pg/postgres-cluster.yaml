@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+data:
+  sql: |
+    create user sonarr;
+    create database sonarr owner sonarr;
+    create database sonarr_log owner sonarr;
+metadata:
+  name: init-arr-dbs
+  namespace: arr
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: arr-pg
+  namespace: arr
+spec:
+  instances: 2
+  primaryUpdateStrategy: unsupervised
+  bootstrap:
+    initdb:
+      database: app #app not used
+      owner: app
+      postInitApplicationSQLRefs:
+        configMapRefs:
+        - name: init-arr-dbs
+          key: sql
+  storage:
+    size: 1Gi
