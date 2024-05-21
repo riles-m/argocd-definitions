@@ -12,21 +12,8 @@ spec:
     chart: cloudnative-pg
     repoURL: https://cloudnative-pg.github.io/charts
     targetRevision: 0.21.2
+    helm:
+      releaseName: cnpg-operator
   syncPolicy:
     syncOptions:
     - CreateNamespace=true
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: arr-pg
-  namespace: argocd
-spec:
-  destination:
-    namespace: arr
-    server: https://kubernetes.default.svc
-  project: media
-  source:
-    path: postgres-cluster
-    repoURL: https://github.com/riles-m/argocd-definitions
-    targetRevision: HEAD
