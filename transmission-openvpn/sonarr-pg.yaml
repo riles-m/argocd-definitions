@@ -43,7 +43,7 @@ metadata:
 spec:
   storageClassName: local-path-ssd
   volumeName: sonarr-pg-config-pv
-  accesMode: ReadWriteOnce
+  accesModes: ReadWriteOnce
 ---
 apiVersion: v1
 kind: Service
