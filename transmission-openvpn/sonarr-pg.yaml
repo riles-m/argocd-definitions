@@ -28,9 +28,7 @@ spec:
           resources: {}
           volumeMounts:
             - name: sonarr-pg-config-xml
-              mountPath: "/config/config.xml"
-            - mountPath: /config
-              name: sonarr-pg-config
+              mountPath: /config
       restartPolicy: Always
       volumes:
         - name: sonarr-pg-config
@@ -99,6 +97,7 @@ metadata:
   namespace: arr
   annotations:
     avp.kubernetes.io/path: "kv/data/sonarr-pg"
+    avp.kubernetes.io/version: 2
 type: Opaque
 stringData:
   config.xml: <config>
