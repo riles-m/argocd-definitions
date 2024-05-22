@@ -108,7 +108,7 @@ spec:
 kind: Secret
 apiVersion: v1
 metadata:
-  name: arr-pg-config
+  name: lidarr-pg-config
   namespace: arr
   annotations:
     avp.kubernetes.io/path: "kv/data/arr-pg-users"
