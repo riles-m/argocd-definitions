@@ -19,11 +19,13 @@ spec:
   primaryUpdateStrategy: unsupervised
   bootstrap:
     initdb:
-      database: app #app not used
-      owner: app
-      postInitApplicationSQLRefs:
-        configMapRefs:
-        - name: init-arr-dbs
-          key: sql
+      database: sonarr_main #app not used
+      owner: sonarr
+      database: sonarr_logs #app not used
+      owner: sonarr
+        #      postInitApplicationSQLRefs:
+        #        configMapRefs:
+        #        - name: init-arr-dbs
+        #          key: sql
   storage:
     size: 1Gi
