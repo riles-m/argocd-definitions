@@ -34,8 +34,10 @@ spec:
           - name: pg-arr-users
             key: sql
   storage:
-    size: 1Gi
+    size: 15Gi
     storageClass: local-path-ssd
+  monitoring:
+    enablePodMonitor: true
 ---
 kind: Secret
 apiVersion: v1
