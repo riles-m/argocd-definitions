@@ -97,7 +97,7 @@ metadata:
   namespace: arr
   annotations:
     avp.kubernetes.io/path: "kv/data/sonarr-pg"
-    avp.kubernetes.io/version: 2
+    avp.kubernetes.io/secret-version: "2"
 type: Opaque
 stringData:
   config.xml: <config>
