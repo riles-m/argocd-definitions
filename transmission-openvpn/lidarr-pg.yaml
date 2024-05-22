@@ -51,21 +51,7 @@ spec:
             path: /tank/transmission_k8s_data
             readOnly: false
         - name: lidarr-config
-          presistentVolumeClaim: 
-            claimName: lidarr-pg-config-pvc
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: lidarr-pg-config-pvc
-  namespace: arr
-spec:
-  storageClassName: local-path-ssd
-  accessModes: 
-  - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
+          emptyDir: {}
 ---
 apiVersion: v1
 kind: Service
