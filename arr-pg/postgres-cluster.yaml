@@ -8,7 +8,6 @@ spec:
   primaryUpdateStrategy: unsupervised
   bootstrap:
     initdb:
-      database: app #app not used
       owner: app
       postInitSQL:
         - create user sonarr;
@@ -36,6 +35,7 @@ spec:
             key: sql
   storage:
     size: 1Gi
+    storageClass: local-path-ssd
 ---
 kind: Secret
 apiVersion: v1
