@@ -1,0 +1,111 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: radarr-pg
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: radarr-pg
+  template:
+    metadata:
+      labels:
+        app: radarr-pg
+    spec:
+      containers:
+        - env:
+            - name: PGID
+              value: "65534"
+            - name: PUID
+              value: "65534"
+            - name: TZ
+              value: America/New_York
+          image: linuxserver/radarr
+          lifecycle:
+            postStart:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - cp -f /secrets/config.xml /config/config.xml
+          name: radarr
+          ports:
+            - containerPort: 7878
+          resources: {}
+          volumeMounts:
+            - name: radarr-pg-config-xml
+              mountPath: /secrets
+            - mountPath: /config
+              name: radarr-pg-config
+            - mountPath: /data
+              name: nfs-data
+            - mountPath: /old-data
+              name: nfs-data-old
+      restartPolicy: Always
+      volumes:
+        - name: nfs-data
+          nfs:
+            server: drebin.riles.xyz
+            path: /tank/transmission_k8s_data
+            readOnly: false
+        - name: nfs-data-old
+          nfs:
+            server: drebin.riles.xyz
+            path: /home/reilly/transmission
+            readOnly: false
+        - name: radarr-pg-config
+          emptyDir: {}
+        - name: radarr-pg-config-xml
+          secret:
+            secretName: radarr-pg-config
+            key: config.xml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: radarr-pg
+spec:
+  ports:
+    - name: "7878"
+      port: 7878
+      targetPort: 7878
+  selector:
+    app: radarr-pg
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: radarr-pg
+  annotations:
+    cert-manager.io/cluster-issuer: le-example-http
+    external-dns.alpha.kubernetes.io/hostname: radarr-pg.dev-riles.xyz.
+    kubernetes.io/ingress.class: nginx
+    nginx.org/websocket-services: radarr-pg
+spec:
+  rules:
+  - host: "radarr-pg.dev-riles.xyz"
+    http:
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: radarr-pg
+              port:
+                number: 7878
+  tls:
+  - hosts:
+    - radarr-pg.dev-riles.xyz
+    secretName: tls-radarr-pg-ingress-http
+---
+kind: Secret
+apiVersion: v1
+metadata:
+  name: radarr-pg-config
+  namespace: arr
+  annotations:
+    avp.kubernetes.io/path: "kv/data/arr-pg-users"
+    avp.kubernetes.io/secret-version: "2"
+type: Opaque
+stringData:
+  config.xml: <radarr_config>
