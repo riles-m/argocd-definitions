@@ -22,12 +22,21 @@ spec:
             - name: TZ
               value: America/New_York
           image: linuxserver/sonarr
+          lifecycle:
+            postStart:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - cp -f /secrets/config.xml /config/config.xml
           name: sonarr
           ports:
             - containerPort: 8989
           resources: {}
           volumeMounts:
             - name: sonarr-pg-config-xml
+              mountPath: /secrets
+            - name: sonarr-pg-config
               mountPath: /config
       restartPolicy: Always
       volumes:
