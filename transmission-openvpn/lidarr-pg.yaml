@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: lidarr
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: lidarr
@@ -21,62 +21,98 @@ spec:
             - name: TZ
               value: America/New_York
           image: linuxserver/lidarr
+          lifecycle:
+            postStart:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - cp -f /secrets/config.xml /config/config.xml
           name: lidarr
           ports:
             - containerPort: 8686
           resources: {}
           volumeMounts:
+            - name: lidarr-pg-config-xml
+              mountPath: /secrets
             - mountPath: /config
               name: lidarr-config
             - mountPath: /data
               name: nfs-data
       restartPolicy: Always
       volumes:
+        - name: lidarr-pg-config-xml
+          secret:
+            secretName: lidarr-pg-config
+            key: config.xml
         - name: nfs-data
           nfs:
             server: drebin.riles.xyz
             path: /tank/transmission_k8s_data
             readOnly: false
         - name: lidarr-config
-          nfs:
-            server: drebin.riles.xyz
-            path: /ssd_pool/lidarr-config
-            readOnly: false
+          presistentVolumeClaim: 
+          claimName: lidarr-pg-config-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: lidarr-pg-config-pvc
+  namespace: arr
+spec:
+  storageClassName: local-path-ssd
+  accessModes: 
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: lidarr
+  name: lidarr-pg
 spec:
   ports:
     - name: "8686"
       port: 8686
       targetPort: 8686
   selector:
-    app: lidarr
+    app: lidarr-pg
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: lidarr
+  name: lidarr-pg
   annotations:
     cert-manager.io/cluster-issuer: le-example-http
-    external-dns.alpha.kubernetes.io/hostname: lidarr.dev-riles.xyz.
+    external-dns.alpha.kubernetes.io/hostname: lidarr-pg.dev-riles.xyz.
     kubernetes.io/ingress.class: nginx
-    nginx.org/websocket-services: lidarr
+    nginx.org/websocket-services: lidarr-pg
 spec:
   rules:
-  - host: "lidarr.dev-riles.xyz"
+  - host: "lidarr-pg.dev-riles.xyz"
     http:
       paths:
         - path: /
           pathType: Prefix
           backend:
             service:
-              name: lidarr
+              name: lidarr-pg
               port:
                 number: 8686
   tls:
   - hosts:
-    - lidarr.dev-riles.xyz
-    secretName: tls-lidarr-ingress-http
+    - lidarr-pg.dev-riles.xyz
+    secretName: tls-lidarr-pg-ingress-http
+---
+kind: Secret
+apiVersion: v1
+metadata:
+  name: arr-pg-config
+  namespace: arr
+  annotations:
+    avp.kubernetes.io/path: "kv/data/arr-pg-users"
+    avp.kubernetes.io/secret-version: "2"
+type: Opaque
+stringData:
+  config.xml: <lidarr_config>
