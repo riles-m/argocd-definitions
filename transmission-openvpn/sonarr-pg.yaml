@@ -27,6 +27,8 @@ spec:
             - containerPort: 8989
           resources: {}
           volumeMounts:
+            - name: sonarr-pg-config-xml
+              mountPath: "/config/config.xml"
             - mountPath: /config
               name: sonarr-pg-config
       restartPolicy: Always
@@ -34,6 +36,9 @@ spec:
         - name: sonarr-pg-config
           persistentVolumeClaim:
             claimName: sonarr-pg-config-pvc
+        - name: sonarr-pg-config-xml
+          secret:
+            secretName: sonarr-pg-config
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -96,4 +101,4 @@ metadata:
     avp.kubernetes.io/path: "kv/data/sonarr-pg"
 type: Opaque
 stringData:
-  config: <config>
+  config.xml: <config>
