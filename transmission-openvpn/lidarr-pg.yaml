@@ -52,7 +52,7 @@ spec:
             readOnly: false
         - name: lidarr-config
           presistentVolumeClaim: 
-          claimName: lidarr-pg-config-pvc
+            claimName: lidarr-pg-config-pvc
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
