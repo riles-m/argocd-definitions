@@ -47,7 +47,6 @@ metadata:
   namespace: arr
 spec:
   storageClassName: local-path-ssd
-  volumeName: sonarr-pg-config-pv
   accessModes: 
   - ReadWriteOnce
   resources:
