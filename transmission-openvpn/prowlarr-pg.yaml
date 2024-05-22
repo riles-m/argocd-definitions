@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prowlarr-pg
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prowlarr-pg
+  template:
+    metadata:
+      labels:
+        app: prowlarr-pg
+    spec:
+      containers:
+        - env:
+            - name: PGID
+              value: "65534"
+            - name: PUID
+              value: "65534"
+            - name: TZ
+              value: Americas/New_York
+          image: linuxserver/prowlarr
+          name: prowlarr
+          ports:
+            - containerPort: 9696
+          volumeMounts:
+            - name: prowlarr-pg-config-xml
+              mountPath: /secrets
+            - mountPath: /config
+              name: prowlarr-pg-config
+      restartPolicy: Always
+      volumes:
+        - name: prowlarr-pg-config
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prowlarr-pg
+spec:
+  ports:
+    - name: "9696"
+      port: 9696
+      targetPort: 9696
+  selector:
+    app: prowlarr-pg
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: prowlarr-pg
+  annotations:
+    cert-manager.io/cluster-issuer: le-example-http
+    external-dns.alpha.kubernetes.io/hostname: prowlarr-pg.dev-riles.xyz.
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+  - host: "prowlarr-pg.dev-riles.xyz"
+    http:
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: prowlarr-pg
+              port:
+                number: 9696
+  tls:
+  - hosts:
+    - prowlarr-pg.dev-riles.xyz
+    secretName: tls-prowlarr-pg-ingress-http
+---
+kind: Secret
+apiVersion: v1
+metadata:
+  name: prowlarr-pg-config
+  namespace: arr
+  annotations:
+    avp.kubernetes.io/path: "kv/data/arr-pg-users"
+    avp.kubernetes.io/secret-version: "2"
+type: Opaque
+stringData:
+  config.xml: <prowlarr_config>
