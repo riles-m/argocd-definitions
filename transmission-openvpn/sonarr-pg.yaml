@@ -38,6 +38,10 @@ spec:
               mountPath: /secrets
             - name: sonarr-pg-config
               mountPath: /config
+            - mountPath: /data
+              name: nfs-data
+            - mountPath: /old-data
+              name: nfs-data-old
       restartPolicy: Always
       volumes:
         - name: sonarr-pg-config
@@ -47,6 +51,16 @@ spec:
           secret:
             secretName: sonarr-pg-config
             key: config.xml
+        - name: nfs-data-old
+          nfs:
+            server: drebin.riles.xyz
+            path: /home/reilly/transmission
+            readOnly: false
+        - name: nfs-data
+          nfs:
+            server: drebin.riles.xyz
+            path: /tank/transmission_k8s_data
+            readOnly: false
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
