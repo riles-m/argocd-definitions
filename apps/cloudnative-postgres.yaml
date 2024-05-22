@@ -10,8 +10,30 @@ spec:
   project: default
   source:
     repoURL: https://github.com/cloudnative-pg/cloudnative-pg
+    path: releases
     directory:
-      include: releases/cnpg-1.23.1.yaml
+      include: 'cnpg-1.23.1.yaml'
+  syncPolicy:
+    syncOptions:
+    - ServerSideApply=true
+    - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: arr-pg
+  namespace: argocd
+spec:
+  destination:
+    namespace: arr
+    server: https://kubernetes.default.svc
+  project: media
+  source:
+    plugin:
+      name: argocd-vault-plugin
+    path: arr-pg
+    repoURL: https://github.com/riles-m/argocd-definitions
+    targetRevision: HEAD
   syncPolicy:
     syncOptions:
     - CreateNamespace=true
