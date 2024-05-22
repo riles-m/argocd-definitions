@@ -11,25 +11,25 @@ spec:
       database: app #app not used
       owner: app
       postInitSQL:
-        - create user sonarr;
-        - create database sonarr owner sonarr;
-        - create database sonarr-log owner sonarr;
-        - create user radarr;
-        - create database radarr owner radarr;
-        - create database radarr-log owner radarr;
-        - create user lidarr;
-        - create database lidarr owner lidarr;
-        - create database lidarr-log owner lidarr;
-        - create user readarr;
-        - create database readarr owner readarr;
-        - create database readarr-log owner readarr;
-        - create database readarr-cache owner readarr;
-        - create user prowlarr;
-        - create database prowlarr owner prowlarr;
-        - create database prowlarr-log owner prowlarr;
-        - create user jellyfin;
-        - create database jellyfin owner jellyfin;
-        - create database jellyfin-log owner jellyfin;
+        _ create user sonarr;
+        _ create database sonarr owner sonarr;
+        _ create database sonarr_log owner sonarr;
+        _ create user radarr;
+        _ create database radarr owner radarr;
+        _ create database radarr_log owner radarr;
+        _ create user lidarr;
+        _ create database lidarr owner lidarr;
+        _ create database lidarr_log owner lidarr;
+        _ create user readarr;
+        _ create database readarr owner readarr;
+        _ create database readarr_log owner readarr;
+        _ create database readarr_cache owner readarr;
+        _ create user prowlarr;
+        _ create database prowlarr owner prowlarr;
+        _ create database prowlarr_log owner prowlarr;
+        _ create user jellyfin;
+        _ create database jellyfin owner jellyfin;
+        _ create database jellyfin_log owner jellyfin;
       postInitApplicationSQLRefs:
         secretRefs:
           - name: pg-arr-users
