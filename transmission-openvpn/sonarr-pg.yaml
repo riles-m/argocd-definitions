@@ -45,6 +45,9 @@ spec:
   volumeName: sonarr-pg-config-pv
   accessModes: 
   - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Mi
 ---
 apiVersion: v1
 kind: Service
