@@ -45,8 +45,7 @@ spec:
       restartPolicy: Always
       volumes:
         - name: sonarr-pg-config
-          persistentVolumeClaim:
-            claimName: sonarr-pg-config-pvc
+          emptyDir: {}
         - name: sonarr-pg-config-xml
           secret:
             secretName: sonarr-pg-config
@@ -61,19 +60,6 @@ spec:
             server: drebin.riles.xyz
             path: /tank/transmission_k8s_data
             readOnly: false
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: sonarr-pg-config-pvc
-  namespace: arr
-spec:
-  storageClassName: local-path-ssd
-  accessModes: 
-  - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
 ---
 apiVersion: v1
 kind: Service
