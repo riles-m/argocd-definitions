@@ -21,6 +21,13 @@ spec:
             - name: TZ
               value: Americas/New_York
           image: linuxserver/prowlarr
+          lifecycle:
+            postStart:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - cp -f /secrets/config.xml /config/config.xml
           name: prowlarr
           ports:
             - containerPort: 9696
@@ -33,6 +40,10 @@ spec:
       volumes:
         - name: prowlarr-pg-config
           emptyDir: {}
+        - name: prowlarr-pg-config-xml
+          secret:
+            secretName: prowlarr-pg-config
+            key: config.xml
 ---
 apiVersion: v1
 kind: Service
