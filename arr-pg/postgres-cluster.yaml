@@ -21,9 +21,10 @@ spec:
     initdb:
       database: app #app not used
       owner: app
-      postInitSQLRefs:
-        configMapRefs:
-        - name: init-arr-dbs
-          key: sql
+      postInitSQL:
+        - create user sonarr;
+        - create database sonarr owner sonarr;
+        - create database sonarr_log owner sonarr;
+
   storage:
     size: 1Gi
