@@ -22,7 +22,7 @@ spec:
       serviceAccountName: jellyfin
       containers:
         - name: jellyfin
-          image: "docker.io/linuxserver/jellyfin:10.9.11"
+          image: "docker.io/linuxserver/jellyfin:10.10.3"
           volumeMounts:
             - mountPath: /data
               name: nfs-data
