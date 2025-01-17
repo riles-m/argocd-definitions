@@ -87,7 +87,7 @@ metadata:
   labels:
     app: xmage
 spec:
-  type: ClusterIP
+  type: NodePort
   ports:
     - port: 17171
       targetPort: 17171
@@ -99,29 +99,3 @@ spec:
       name: xmage2
   selector:
     app: xmage
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: xmage
-  labels:
-    app: xmage
-  annotations:
-    cert-manager.io/cluster-issuer: le-example-http
-    kubernetes.io/ingress.class: nginx
-spec:
-  rules:
-  - host: "xmage-beta.riles.xyz"
-    http:
-      paths:
-        - path: /
-          pathType: Prefix
-          backend:
-            service:
-              name: xmage
-              port:
-                number: 17171
-  tls:
-  - hosts:
-    - xmage-beta.riles.xyz
-    secretName: tls-xmage-ingress-http
