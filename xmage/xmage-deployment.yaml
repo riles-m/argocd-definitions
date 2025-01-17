@@ -16,8 +16,6 @@ spec:
       labels:
         app: xmage
     spec:
-      hostNetwork: false
-      serviceAccountName: xmage
       containers:
         - name: xmage
           image: "goesta/xmage-beta:1.4.55-dev_2024-12-16_21-00"
