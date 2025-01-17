@@ -74,28 +74,6 @@ spec:
       storage: 10Gi
 ---
 apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: xmage-db
-spec:
-  storageClassName: local-path-ssd
-  capacity:
-    storage: 5Gi
-  accessModes:
-    - ReadWriteOnce
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: xmage-saved
-spec:
-  storageClassName: local-path-ssd
-  capacity:
-    storage: 10Gi
-  accessModes:
-    - ReadWriteOnce
----
-apiVersion: v1
 kind: Service
 metadata:
   name: xmage
@@ -107,11 +85,11 @@ spec:
     - port: 17171
       targetPort: 17171
       protocol: TCP
-      name: 17171
+      name: xmage1
     - port: 17179
       targetPort: 17179
       protocol: TCP
-      name: 17179
+      name: xmage2
   selector:
     app: xmage
 ---
