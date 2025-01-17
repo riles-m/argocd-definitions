@@ -21,7 +21,7 @@ spec:
           image: "goesta/xmage-beta:1.4.55-dev_2024-12-16_21-00"
           env:
             - name: XMAGE_DOCKER_SERVER_ADDRESS
-              value: "riles.xyz"
+              value: "0.0.0.0"
             - name: XMAGE_DOCKER_SERVER_NAME
               value: "xmage-beta"
           ports:
@@ -32,8 +32,15 @@ spec:
               containerPort: 17179
               protocol: TCP
           readinessProbe:
-            httpGet:
-              port: http
+            tcpSocket:
+              port: 17171
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: 17171
+            initialDelaySeconds: 15
+            periodSeconds: 10
           volumeMounts:
             - mountPath: "/xmage/db"
               name: xmage-db
