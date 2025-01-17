@@ -104,14 +104,14 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-    - port: "17171"
+    - port: 17171
       targetPort: 17171
       protocol: TCP
-      name: "17171"
-    - port: "17179"
+      name: 17171
+    - port: 17179
       targetPort: 17179
       protocol: TCP
-      name: "17179"
+      name: 17179
   selector:
     app: xmage
 ---
