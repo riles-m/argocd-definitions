@@ -1,0 +1,144 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xmage
+  labels:
+    app: xmage
+spec:
+  strategy:
+    type: Recreate
+  replicas: 1
+  selector:
+    matchLabels:
+      app: xmage
+  template:
+    metadata:
+      labels:
+        app: xmage
+    spec:
+      hostNetwork: false
+      serviceAccountName: xmage
+      containers:
+        - name: xmage
+          image: "goesta/xmage-beta:1.4.55-dev_2024-12-16_21-00"
+          env:
+            - name: XMAGE_DOCKER_SERVER_ADDRESS
+              value: "riles.xyz"
+            - name: XMAGE_DOCKER_SERVER_NAME
+              value: "xmage-beta"
+          ports:
+            - name: xmage1
+              containerPort: 17171
+              protocol: TCP
+            - name: xmage2
+              containerPort: 17179
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              port: http
+          volumeMounts:
+            - mountPath: "/xmage/db"
+              name: xmage-db
+            - mountPath: "/xmage/saved"
+              name: xmage-saved
+      volumes:
+        - name: xmage-db
+          persistentVolumeClaim:
+            claimName: xmage-db
+        - name: xmage-saved
+          persistentVolumeClaim:
+            claimName: xmage-saved
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: xmage-db
+  namespace: xmage
+spec:
+  storageClassName: local-path-ssd
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: xmage-saved
+  namespace: xmage
+spec:
+  storageClassName: local-path-ssd
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: xmage-db
+spec:
+  storageClassName: local-path-ssd
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: xmage-saved
+spec:
+  storageClassName: local-path-ssd
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: xmage
+  labels:
+    app: xmage
+spec:
+  type: ClusterIP
+  ports:
+    - port: "17171"
+      targetPort: 17171
+      protocol: TCP
+      name: "17171"
+    - port: "17179"
+      targetPort: 17179
+      protocol: TCP
+      name: "17179"
+  selector:
+    app: xmage
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: xmage
+  labels:
+    app: xmage
+  annotations:
+    cert-manager.io/cluster-issuer: le-example-http
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+  - host: "xmage-beta.riles.xyz"
+    http:
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: xmage
+              port:
+                number: 17171
+  tls:
+  - hosts:
+    - xmage-beta.riles.xyz
+    secretName: tls-xmage-ingress-http
