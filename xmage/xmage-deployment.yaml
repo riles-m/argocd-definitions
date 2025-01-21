@@ -91,10 +91,12 @@ spec:
   ports:
     - port: 17171
       targetPort: 17171
+      nodePort: 32438
       protocol: TCP
       name: xmage1
     - port: 17179
       targetPort: 17179
+      nodePort: 30576
       protocol: TCP
       name: xmage2
   selector:
