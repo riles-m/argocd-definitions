@@ -1,0 +1,34 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: gitea-pg
+  namespace: gitea
+spec:
+  instances: 2
+  primaryUpdateStrategy: unsupervised
+  bootstrap:
+    initdb:
+      owner: gitea
+      postInitSQL:
+        - CREATE ROLE gitea WITH LOGIN PASSWORD 'gitea';
+        - CREATE DATABASE giteadb WITH OWNER gitea TEMPLATE template0 ENCODING UTF8 LC_COLLATE 'en_US.UTF-8' LC_CTYPE 'en_US.UTF-8';
+      postInitApplicationSQLRefs:
+        secretRefs:
+          - name: gitea-pg-users
+            key: sql
+  storage:
+    size: 10Gi
+    storageClass: local-path-ssd
+  monitoring:
+    enablePodMonitor: true
+---
+kind: Secret
+apiVersion: v1
+metadata:
+  name: gitea-pg-users
+  namespace: gitea
+  annotations:
+    avp.kubernetes.io/path: "kv/data/gitea-pg-users"
+type: Opaque
+stringData:
+  sql: <sql>
