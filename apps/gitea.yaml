@@ -5,34 +5,36 @@ source:
   plugin:
     name: argocd-vault-plugin-helm
   chart: gitea
-  helm:
-    values: |
-      gitea:
-        config:
-          database:
-            DB_TYPE: postgres
-						NAME: gitea
-						HOST: gitea-pg.rw.gitea.svc.cluster.local
-						USER: <path:kv/data/giteapg-users#pg_user>
-						PASSWD: <path:kv/data/giteapg-users#pg_pwd>
-						SCHEMA: gitea
-      postgresql:
-        enabled: false
-      postgresql-ha:
-        enabled: false
-      ingress:
-        enabled: true
-        className: nginx
-        hosts:
-        - git.riles.xyz
-        annotations:
-          cert-manager.io/cluster-issuer: le-example-http
-          kubernetes.io/ingress.class: nginx
-          kubernetes.io/tls-acme: "true"
-        tls:
-          - secretName: git-riles-tls
-            hosts:
-              - git.riles.xyz
+  plugin:
+    env:
+    - name: HELM_VALUES
+     value: |
+				gitea:
+					config:
+						database:
+							DB_TYPE: postgres
+							NAME: gitea
+							HOST: gitea-pg.rw.gitea.svc.cluster.local
+							USER: <path:kv/data/gitea-pg-users#pg_user>
+							PASSWD: <path:kv/data/gitea-pg-users#pg_pwd>
+							SCHEMA: gitea
+				postgresql:
+					enabled: false
+				postgresql-ha:
+					enabled: false
+				ingress:
+					enabled: true
+					className: nginx
+					hosts:
+					- git.riles.xyz
+					annotations:
+						cert-manager.io/cluster-issuer: le-example-http
+						kubernetes.io/ingress.class: nginx
+						kubernetes.io/tls-acme: "true"
+					tls:
+						- secretName: git-riles-tls
+							hosts:
+								- git.riles.xyz
 destination:
   server: 'https://kubernetes.default.svc'
   namespace: gitea
