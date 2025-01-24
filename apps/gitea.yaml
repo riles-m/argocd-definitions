@@ -1,43 +1,58 @@
-project: cicd
-source:
-  repoURL: 'https://dl.gitea.com/charts/'
-  targetRevision: 10.6.0
-  plugin:
-    name: argocd-vault-plugin-helm
-  chart: gitea
-  plugin:
-    env:
-    - name: HELM_VALUES
-     value: |
-				gitea:
-					config:
-						database:
-							DB_TYPE: postgres
-							NAME: gitea
-							HOST: gitea-pg.rw.gitea.svc.cluster.local
-							USER: <path:kv/data/gitea-pg-users#pg_user>
-							PASSWD: <path:kv/data/gitea-pg-users#pg_pwd>
-							SCHEMA: gitea
-				postgresql:
-					enabled: false
-				postgresql-ha:
-					enabled: false
-				ingress:
-					enabled: true
-					className: nginx
-					hosts:
-					- git.riles.xyz
-					annotations:
-						cert-manager.io/cluster-issuer: le-example-http
-						kubernetes.io/ingress.class: nginx
-						kubernetes.io/tls-acme: "true"
-					tls:
-						- secretName: git-riles-tls
-							hosts:
-								- git.riles.xyz
-destination:
-  server: 'https://kubernetes.default.svc'
-  namespace: gitea
-syncPolicy:
-  syncOptions:
-    - CreateNamespace=true
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: gitea
+  namespace: argocd
+spec:
+  project: cicd
+  source:
+    chart: gitea
+    plugin:
+      env:
+      - name: HELM_VALUES
+        value: |
+          gitea:
+            config:
+              database:
+                DB_TYPE: postgres
+                NAME: gitea
+                HOST: gitea-pg.rw.gitea.svc.cluster.local
+                USER: <path:kv/data/gitea-pg-users#pg_user>
+                PASSWD: <path:kv/data/gitea-pg-users#pg_pwd>
+                SCHEMA: gitea
+          postgresql:
+            enabled: false
+          postgresql-ha:
+            enabled: false
+          redis:
+            enabled: true
+            global:
+              password: <path:kv/data/gitea-pg-users#redis_pwd>
+          redis-cluster:
+            enabled: false
+          ingress:
+            apiVersion: "networking.k8s.io/v1"
+            enabled: true
+            className: nginx
+            hosts:
+              - host: git.riles.xyz
+                paths:
+                  - path: /
+                    pathType: Prefix
+            annotations:
+              cert-manager.io/cluster-issuer: le-example-http
+              kubernetes.io/ingress.class: nginx
+              kubernetes.io/tls-acme: "true"
+            tls:
+              - secretName: git-riles-tls
+                hosts:
+                  - git.riles.xyz
+      name: argocd-vault-plugin-helm
+    repoURL: 'https://dl.gitea.com/charts/'
+    targetRevision: 10.6.0
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: gitea
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
