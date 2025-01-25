@@ -14,10 +14,6 @@ spec:
         name: gitea-pg-users
       localeCType: 'en_US.UTF-8'
       localeCollate: 'en_US.UTF-8'
-      postInitApplicationSQLRefs:
-        secretRefs:
-          - name: gitea-pg-users
-            key: sql
   storage:
     size: 10Gi
     storageClass: local-path-ssd
