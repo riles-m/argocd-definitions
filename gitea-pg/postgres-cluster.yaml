@@ -14,8 +14,6 @@ spec:
         name: gitea-pg-users
       postInitSQL:
         - create schema gitea;
-        - alter use gitea set search_path=gitea;
-        - grant all on schema gitea to gitea;
       localeCType: 'en_US.UTF-8'
       localeCollate: 'en_US.UTF-8'
   storage:
