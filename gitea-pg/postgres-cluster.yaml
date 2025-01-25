@@ -12,8 +12,8 @@ spec:
       owner: gitea
       secret:
         name: gitea-pg-users
-      postInitSQL:
-        - create schema gitea;
+      postInitApplicationSQL:
+        - CREATE DATABASE giteadb WITH OWNER gitea TEMPLATE template0 ENCODING UTF8 LC_COLLATE 'en_US.UTF-8' LC_CTYPE 'en_US.UTF-8';
       localeCType: 'en_US.UTF-8'
       localeCollate: 'en_US.UTF-8'
   storage:
