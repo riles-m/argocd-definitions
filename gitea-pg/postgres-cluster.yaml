@@ -13,7 +13,7 @@ spec:
       secret:
         name: gitea-pg-users
       postInitApplicationSQL:
-        - CREATE SCHEMA gitea;
+        - CREATE SCHEMA gitea authorization gitea;
       localeCType: 'en_US.UTF-8'
       localeCollate: 'en_US.UTF-8'
   storage:
