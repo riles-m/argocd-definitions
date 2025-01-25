@@ -11,12 +11,48 @@ spec:
       env:
       - name: HELM_VALUES
         value: |
+          persistence:
+            storageClass: local-path-hdd
+          actions:
+            enabled: true
+            init:
+              image:
+                tag: latest
+            statefulset:
+              dind:
+                tag: latest
+              actRunner:
+                config: |
+                  log:
+                    level: debug
+                  cache:
+                    enabled: false
+                  runner:
+                    labels:
+                      - "ubuntu-latest"
+                      - "ubuntu-latest:docker://gitea/runner-images:ubuntu-latest"
+                      - "ubuntu-22.04:docker://gitea/runner-images:ubuntu-22.04"
+                      - "ubuntu-20.04:docker://gitea/runner-images:ubuntu-20.04"
+                repository: gitea/act_runner
+                tag: nightly
+            provisioning:
+              enabled: true
           gitea:
+            admin:
+              username: <path:kv/data/gitea-pg-users#gitea_admin_user>
+              password: <path:kv/data/gitea-pg-users#gitea_admin_pwd>
+              email: <path:kv/data/gitea-pg-users#gitea_admin_email>
+              passwordMode: keepUpdated
+            additionalConfigFromEnvs:
+              - name: ENV_TO_INI__DATABASE__HOST
+                value: gitea-pg-rw.gitea.svc.cluster.local
+              - name: ENV_TO_INI__DATABASE__PASSWD
+                value: <path:kv/data/gitea-pg-users#pg_pwd>
             config:
               database:
                 DB_TYPE: postgres
-                NAME: gitea
-                HOST: gitea-pg.rw.gitea.svc.cluster.local
+                NAME: giteadb
+                HOST: gitea-pg-rw.gitea.svc.cluster.local
                 USER: <path:kv/data/gitea-pg-users#pg_user>
                 PASSWD: <path:kv/data/gitea-pg-users#pg_pwd>
                 SCHEMA: gitea
@@ -27,7 +63,8 @@ spec:
           redis:
             enabled: true
             global:
-              password: <path:kv/data/gitea-pg-users#redis_pwd>
+              redis:
+                password: <path:kv/data/gitea-pg-users#redis_pwd>
           redis-cluster:
             enabled: false
           ingress:
@@ -43,6 +80,7 @@ spec:
               cert-manager.io/cluster-issuer: le-example-http
               kubernetes.io/ingress.class: nginx
               kubernetes.io/tls-acme: "true"
+              nginx.ingress.kubernetes.io/proxy-body-size: 5000m
             tls:
               - secretName: git-riles-tls
                 hosts:
