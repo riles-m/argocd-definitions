@@ -10,6 +10,8 @@ spec:
     initdb:
       database: giteadb
       owner: gitea
+      secret:
+        name: gitea-pg-users
       localeCType: 'en_US.UTF-8'
       localeCollate: 'en_US.UTF-8'
       postInitApplicationSQLRefs:
@@ -29,6 +31,7 @@ metadata:
   namespace: gitea
   annotations:
     avp.kubernetes.io/path: "kv/data/gitea-pg-users"
-type: Opaque
+type: kubernetes.io/basic-auth
 stringData:
-  sql: <sql>
+  username: gitea
+  password: <pg_pwd>
