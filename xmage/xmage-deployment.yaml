@@ -22,9 +22,9 @@ spec:
           tag: latest
           env:
             - name: XMAGE_DOCKER_SERVER_ADDRESS
-              value: "0.0.0.0"
+              value: "xmage-beta.riles.xyz"
             - name: XMAGE_DOCKER_SERVER_NAME
-              value: "xmage-beta"
+              value: "xmage-beta.riles.xyz"
           ports:
             - name: xmage1
               containerPort: 17171
