@@ -1,39 +1,40 @@
-secretKey: <path:kv/data/harbor#secretKey>
-harborAdminPassword: <path:kv/data/harbor#harborAdminPassword>
-externalURL: https://harbor.riles.xyz
-expose:
-  type: ingress
-  tls:
-    certSource: secret
-    secret: 
-      secretName: harbor-ingress
-    enabled: true
-  ingress:
-    annotations:
-      cert-manager.io/cluster-issuer: le-example-http
-      kubernetes.io/tls-acme: "true"
-      nginx.ingress.kubernetes.io/ssl-redirect: "true"
-      nginx.ingress.kubernetes.io/proxy-body-size: "0"
-      nginx.ingress.kubernetes.io/server-snippet: |
-        proxy_set_header Authorization "none";
-    hosts:
-      core: harbor.riles.xyz
-persistence:
-  imageChartStorage:
-    type: s3
-    s3:
-      bucket: harbor-images
-      accesskey: <path:kv/data/harbor#minio_secret_id>
-      secretkey: <path:kv/data/harbor#minio_secret_key>
-      regionendpoint: https://minio.dev-riles.xyz
-  enabled: false
-database:
-  type: external
-  external:
-    host: "harbor-pg-rw"
-    port: 5432
-    coreDatabase: "registry"
-    username: harbor
-    existingSecret: "harbor-pg-user-creds"
-redis:
-  type: internal
+harbor:
+  secretKey: <path:kv/data/harbor#secretKey>
+  harborAdminPassword: <path:kv/data/harbor#harborAdminPassword>
+  externalURL: https://harbor.riles.xyz
+  expose:
+    type: ingress
+    tls:
+      certSource: secret
+      secret: 
+        secretName: harbor-ingress
+      enabled: true
+    ingress:
+      annotations:
+        cert-manager.io/cluster-issuer: le-example-http
+        kubernetes.io/tls-acme: "true"
+        nginx.ingress.kubernetes.io/ssl-redirect: "true"
+        nginx.ingress.kubernetes.io/proxy-body-size: "0"
+        nginx.ingress.kubernetes.io/server-snippet: |
+          proxy_set_header Authorization "none";
+      hosts:
+        core: harbor.riles.xyz
+  persistence:
+    imageChartStorage:
+      type: s3
+      s3:
+        bucket: harbor-images
+        accesskey: <path:kv/data/harbor#minio_secret_id>
+        secretkey: <path:kv/data/harbor#minio_secret_key>
+        regionendpoint: https://minio.dev-riles.xyz
+    enabled: false
+  database:
+    type: external
+    external:
+      host: "harbor-pg-rw"
+      port: 5432
+      coreDatabase: "registry"
+      username: harbor
+      existingSecret: "harbor-pg-user-creds"
+  redis:
+    type: internal
