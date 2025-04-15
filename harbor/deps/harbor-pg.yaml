@@ -1,0 +1,32 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: harbor-pg
+  namespace: harbor
+spec:
+  instances: 2
+  imageName: ghcr.io/cloudnative-pg/postgresql:16
+  primaryUpdateStrategy: unsupervised
+  bootstrap:
+    initdb:
+      database: registry
+      owner: harbor
+      secret:
+        name: harbor-pg-user-creds
+  storage:
+    size: 10Gi
+    storageClass: local-path-ssd
+  monitoring:
+    enablePodMonitor: true
+---
+kind: Secret
+apiVersion: v1
+metadata:
+  name: harbor-pg-user-creds
+  namespace: harbor
+  annotations:
+    avp.kubernetes.io/path: "kv/data/harbor"
+type: kubernetes.io/basic-auth
+stringData:
+  username: harbor
+  password: <pg_pwd>
