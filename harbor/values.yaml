@@ -24,9 +24,8 @@ harbor:
       disableredirect: true
       type: s3
       s3:
+        existingSecret: harbor-s3-creds
         bucket: harbor-images
-        accesskey: <path:kv/data/harbor#minio_secret_id>
-        secretkey: <path:kv/data/harbor#minio_secret_key>
         regionendpoint: https://minio.dev-riles.xyz
         secure: true
         v4auth: true
