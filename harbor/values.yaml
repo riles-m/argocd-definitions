@@ -21,6 +21,7 @@ harbor:
         core: harbor.riles.xyz
   persistence:
     imageChartStorage:
+      disableredirect: true
       type: s3
       s3:
         bucket: harbor-images
