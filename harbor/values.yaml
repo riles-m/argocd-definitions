@@ -20,16 +20,7 @@ harbor:
       hosts:
         core: harbor.riles.xyz
   persistence:
-    imageChartStorage:
-      disableredirect: true
-      type: s3
-      s3:
-        existingSecret: harbor-s3-creds
-        bucket: harbor-images
-        regionendpoint: https://minio.dev-riles.xyz
-        secure: true
-        v4auth: true
-    enabled: false
+    enabled: true
   database:
     type: external
     external:
