@@ -19,6 +19,8 @@ harbor:
           proxy_set_header Authorization "none";
       hosts:
         core: harbor.riles.xyz
+  registry:
+    relativeurls: true
   persistence:
     enabled: true
     registry:
