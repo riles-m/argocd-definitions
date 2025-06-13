@@ -21,6 +21,12 @@ harbor:
         core: harbor.riles.xyz
   persistence:
     enabled: true
+    registry:
+      storageClass: local-path-hdd
+    jobservice:
+      storageClass: local-path-ssd
+    trivy:
+      storageClass: local-path-ssd
   database:
     type: external
     external:
@@ -31,3 +37,4 @@ harbor:
       existingSecret: "harbor-pg-user-creds"
   redis:
     type: internal
+    storageClass: local-path-ssd
