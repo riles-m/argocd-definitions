@@ -15,8 +15,6 @@ harbor:
         kubernetes.io/tls-acme: "true"
         nginx.ingress.kubernetes.io/ssl-redirect: "true"
         nginx.ingress.kubernetes.io/proxy-body-size: "0"
-        nginx.ingress.kubernetes.io/server-snippet: |
-          proxy_set_header Authorization "none";
       hosts:
         core: harbor.riles.xyz
   registry:
