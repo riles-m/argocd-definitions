@@ -1,0 +1,85 @@
+image:
+  repository: b4bz/homer
+  tag: ""
+  pullPolicy: IfNotPresent
+env:
+  TZ: America/Toronto
+service:
+  main:
+    ports:
+      http:
+        port: 8080
+ingress:
+  main:
+    enabled: false
+securityContext:
+  runAsUser: 1000
+  runAsNonRoot: true
+  runAsGroup: 1000
+persistence:
+  config:
+    enabled: false
+    mountPath: /www/assets
+configmap:
+  config:
+    enabled: true
+    data:
+      config.yml: |
+        # General configuration
+        title: "My Awesome Homelab"
+        subtitle: "A central hub for all my services"
+        logo: "assets/logo.png"
+        
+        # Header and Footer
+        header:
+          enabled: true
+          search: true
+        footer:
+          enabled: true
+          copyright: "© 2025 My Homelab"
+        
+        # Service groups
+        services:
+          - name: "Arr"
+            icon: "fas fa-clapperboard"
+            items:
+              - name: "Sonarr"
+                icon: "fas fa-tv"
+                url: "https://sonarr-pg.dev-riles.xyz"
+              - name: "Radarr"
+                icon: "fas fa-tv"
+                url: "https://radarr-pg.dev-riles.xyz"
+              - name: "Lidarr"
+                icon: "fas fa-tv"
+                url: "https://lidarr-pg.dev-riles.xyz"
+          - name: "Home"
+            icon: "fas fa-tools"
+            items:
+              - name: "Jellyfin"
+                icon: "fas fa-tv"
+                url: "https://jellyfin.riles.xyz"
+                target: "_blank"
+              - name: "Audiobookshelf"
+                icon: "fas fa-tv"
+                url: "https://audiobookshelf.riles.xyz"
+                target: "_blank"
+              - name: "Immich"
+                url: "https://immich.dev-riles.xyz"
+              - name: "Home-Assistant"
+                url: "https://home-assistant.dev-riles.xyz"
+              - name: "Paperless"
+                url: "https://paperless.riles.xyz"
+          - name: "Ops"
+            icon: "fas fa-tools"
+            items:
+              - name: "Grafana"
+                url: "https://grafana.riles.xyz"
+              - name: "Harbor"
+                url: "https://harbor.riles.xyz"
+              - name: "Gitea"
+                url: "https://git.riles.xyz"
+              - name: "ArgoCD"
+                url: "https://argocd.dev-riles.xyz"
+              - name: "Vault"
+                url: "https://vault.riles.xyz"
+
