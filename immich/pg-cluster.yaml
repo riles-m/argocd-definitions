@@ -15,7 +15,8 @@ spec:
     initdb:
       database: immich
       owner: immich
-      secret: immich-pg-secret
+      secret:
+        name: immich-pg-secret
       postInitApplicationSQL:
         # Commands based on: https://immich.app/docs/administration/postgres-standalone/#without-superuser-permission
         - CREATE EXTENSION vchord CASCADE;
