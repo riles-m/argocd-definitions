@@ -13,7 +13,9 @@ spec:
       - "vchord.so"
   bootstrap:
     initdb:
-      # TODO: Use managed extensions (pg 18)
+      database: immich
+      owner: immich
+      secret: immich-pg-secret
       postInitApplicationSQL:
         # Commands based on: https://immich.app/docs/administration/postgres-standalone/#without-superuser-permission
         - CREATE EXTENSION vchord CASCADE;
