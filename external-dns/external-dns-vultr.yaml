@@ -55,7 +55,7 @@ spec:
         args:
         - --source=ingress # ingress is also possible
         - --provider=vultr
-        - --domain-filter=dev-riles.xyz
+        - --domain-filter=dev-riles.xyz,smytdffl.com,riles.xyz
         envFrom:
         - secretRef:
             name: vultr-secrets
