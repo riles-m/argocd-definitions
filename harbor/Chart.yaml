@@ -5,6 +5,7 @@ appVersion: dev
 dependencies:
 - name: harbor
   version: 1.17.2
+  appVersion: 2.13.2
   repository: https://helm.goharbor.io
 description: harbor chart
 home: https://goharbor.io
