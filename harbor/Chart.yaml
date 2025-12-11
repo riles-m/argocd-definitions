@@ -1,11 +1,11 @@
 apiVersion: v1
 name: harbor
-version: 1.17.2
+version: 1.18.1
 appVersion: dev
 dependencies:
 - name: harbor
-  version: 1.17.2
-  appVersion: 2.13.2
+  version: 1.18.1
+  appVersion: v2.14.1
   repository: https://helm.goharbor.io
 description: harbor chart
 home: https://goharbor.io
