@@ -1,4 +1,16 @@
 harbor:
+  portal:
+    image:
+      tag: v2.13.2
+  core:
+    image:
+      tag: v2.13.2
+  trivy:
+    image:
+      tag: v2.13.2
+  jobservice:
+    image:
+      tag: v2.13.2
   secretKey: <path:kv/data/harbor#secretKey>
   harborAdminPassword: <path:kv/data/harbor#harborAdminPassword>
   externalURL: https://harbor.riles.xyz
@@ -19,6 +31,8 @@ harbor:
         core: harbor.riles.xyz
   registry:
     relativeurls: true
+    image:
+      tag: v2.13.2
   persistence:
     enabled: true
     registry:
@@ -36,5 +50,7 @@ harbor:
       username: harbor
       existingSecret: "harbor-pg-user-creds"
   redis:
+    image:
+      tag: v2.13.2
     type: internal
     storageClass: local-path-ssd
