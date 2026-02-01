@@ -1,0 +1,35 @@
+metadata_dir = "/mnt/meta"
+data_dir = "/mnt/data"
+
+db_engine = "lmdb"
+
+block_size = 1048576
+
+replication_mode = "1"
+
+compression_level = 1
+
+rpc_bind_addr = "[::]:3901"
+rpc_secret = "tTnQNOLZGlAV6ap1d6ZdpqQaO08W+q2nJuTK/Rb9qbpMbCfu2iYZHpXTGoRaWUMIRJJ4GhYuequr7pOi9zkswA=="
+
+bootstrap_peers = []
+
+[kubernetes_discovery]
+namespace = "garage"
+service_name = "garage"
+skip_crd = false
+
+[s3_api]
+s3_region = "garage"
+api_bind_addr = "[::]:3900"
+root_domain = ".s3.riles.xyz"
+
+[s3_web]
+bind_addr = "[::]:3902"
+root_domain = ".web.riles.xyz"
+index = "index.html"
+
+[admin]
+api_bind_addr = "[::]:3903"
+admin_token = "TUrpPz9BVzSrkto9xINCwlTsVWiS6l7/gURj0mezi0Y="
+metrics_token = "JPmLE7ghmfLvrI1Q5jW7h7D9HnXvOH0KYGcLaclkMaU="

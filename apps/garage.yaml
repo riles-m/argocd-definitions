@@ -1,0 +1,76 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: garage
+  namespace: argocd
+spec:
+  destination:
+    namespace: garage
+    server: https://kubernetes.default.svc
+  project: cicd
+  source:
+    chart: garage
+    plugin:
+      name: argocd-vault-plugin-helm
+      env:
+        - name: HELM_VALUES
+          value: |
+            garage:
+              dbEngine: "lmdb"
+              blockSize: "1048576"
+              replicationFactor: "1"
+              consistencyMode: "dangerous"
+              compressionLevel: "1"
+              rpcBindAddr: "[::]:3901"
+              s3:
+                api:
+                  region: "garage"
+                  rootDomain: ".s3.riles.xyz"
+                web:
+                  rootDomain: ".web.riles.xyz"
+                  index: "index.html"
+            persistence:
+              enabled: true
+              meta:
+                storageClass: "local-path-ssd"
+                size: 1Gi
+              data:
+                storageClass: "local-path-hdd"
+                size: 10Gi
+            # Deployment configuration
+            deployment:
+              kind: StatefulSet
+              replicaCount: 1
+              podManagementPolicy: OrderedReady
+            image:
+              repository: dxflrs/amd64_garage
+              tag: v2.1.0
+              pullPolicy: IfNotPresent
+            initImage:
+              repository: busybox
+              tag: stable
+              pullPolicy: IfNotPresent
+            service:
+              type: ClusterIP
+              s3:
+                api:
+                  port: 3900
+                web:
+                  port: 3902
+                # NOTE: the admin API is excluded for now as it is not consistent across nodes
+
+            ingress:
+              s3:
+                api:
+                  enabled: false
+                web:
+                  enabled: false
+            monitoring:
+              metrics:
+                # -- If true, a service for monitoring is created with a prometheus.io/scrape annotation
+                enabled: true
+    repoURL: harbor.riles.xyz/infra
+    targetRevision: 0.7.2
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
